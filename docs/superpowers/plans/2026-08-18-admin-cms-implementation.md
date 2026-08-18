@@ -972,7 +972,7 @@ describe('validatePerfume', () => {
   it('takes a name of 1 to 60 characters', () => {
     expect(reported({ name: 'x'.repeat(60) })).toBe('');
     expect(reported({ name: 'x'.repeat(61) })).toContain('name: expected 1 to 60 characters');
-    expect(reported(without('name'))).toContain('name: expected 1 to 60 characters');
+    expect(reported({}, { value: without('name') })).toContain('name: expected 1 to 60 characters');
   });
 
   it('requires a brand', () => {
@@ -1047,7 +1047,9 @@ describe('validatePerfume', () => {
 
   it('takes featured and inStock as booleans and nothing else', () => {
     expect(reported({ featured: 'true' })).toContain('featured: expected true or false');
-    expect(reported(without('inStock'))).toContain('inStock: expected true or false');
+    expect(reported({}, { value: without('inStock') })).toContain(
+      'inStock: expected true or false',
+    );
   });
 
   it('takes an order from 0 to 999', () => {
@@ -1056,8 +1058,10 @@ describe('validatePerfume', () => {
   });
 
   it('accepts a missing photo', () => {
-    expect(reported(without('photo'))).toBe('');
-    expect(validatePerfume(candidate(without('photo')), RULES).perfume?.photo).toBeUndefined();
+    expect(reported({}, { value: without('photo') })).toBe('');
+    expect(
+      validatePerfume(candidate({}, { value: without('photo') }), RULES).perfume?.photo,
+    ).toBeUndefined();
   });
 
   it('takes a photo path the templates can address', () => {
