@@ -84,16 +84,29 @@ content/
     hombre.yml
     mujer.yml
   perfumes/
-    khamrah.yml
-    yara.yml
-    ...
+    hombre/
+      khamrah.yml
+      9pm.yml
+    mujer/
+      yara.yml
+      ...
 ```
 
-El nombre del archivo **es** el slug. Un perfume por archivo, no una lista dentro de un archivo:
-con un archivo por ficha cada guardado toca un solo archivo, el diff es legible y dos ediciones
-seguidas no se pisan.
+Un perfume por archivo, no una lista dentro de un archivo: cada guardado toca un solo archivo, el
+diff es legible y dos ediciones seguidas no se pisan.
 
-`content/` se versiona. Es la fuente, no un producto.
+**El directorio se parte por línea, y no es cosmético.** El slug sólo es único _dentro_ de su
+línea —`catalog.spec.ts` afirma exactamente eso, y `bySlug('hombre', 'yara')` devuelve indefinido
+mientras `bySlug('mujer', 'yara')` existe—, así que un `content/perfumes/` plano forzaría una
+unicidad global que el modelo no exige y haría colisionar dos fichas legítimas en un mismo archivo.
+Anidar por línea refleja la URL `/perfumes/<line>/<slug>` y elimina el problema.
+
+Tiene un segundo beneficio: el CMS declara **dos colecciones**, una por línea, así que `line` deja
+de ser un campo que el dueño pueda equivocar y pasa a derivarse del directorio en el que guarda.
+
+`content/` se versiona. Es la fuente, no un producto. `content/` entra en `.prettierignore`: el
+formato de esos archivos lo decide el CMS, y que Prettier los reescriba sólo genera ruido en el
+historial.
 
 ## El generador y sus validaciones
 
@@ -107,26 +120,43 @@ Dos módulos con responsabilidades separadas:
 
 ### Reglas por perfume
 
-| Campo | Regla |
-| --- | --- |
-| `slug` | requerido, `^[a-z0-9]+(-[a-z0-9]+)*$`, **igual al nombre del archivo** |
-| `name` | requerido, 1–60 caracteres |
-| `brand` | requerido, no vacío |
-| `line` | requerido, exactamente `hombre` o `mujer` |
-| `family` | requerido, no vacío |
-| `notes` | requerido, entre 1 y 8 cadenas no vacías |
-| `sizeMl` | requerido, entero, 1–1000 |
-| `priceBob` | requerido, entero, 1–100000 |
-| `concentration` | requerido, no vacío |
-| `summary` | requerido, 40–160 caracteres — alimenta la meta description |
-| `description` | requerido, mínimo 80 caracteres |
-| `featured` | requerido, booleano |
-| `inStock` | requerido, booleano |
-| `order` | requerido, entero 0–999, por defecto 100 |
-| `photo` | opcional; `^/img/perfumes/[a-z0-9-]+\.(webp\|jpg\|png)$` **y el archivo debe existir**. El CMS siempre sube `.webp`; los otros dos se admiten para archivos añadidos a mano |
+| Campo           | Regla                                                                                                                                                                       |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `slug`          | requerido, `^[a-z0-9]+(-[a-z0-9]+)*$`, **igual al nombre del archivo**                                                                                                      |
+| `name`          | requerido, 1–60 caracteres                                                                                                                                                  |
+| `brand`         | requerido, no vacío                                                                                                                                                         |
+| `line`          | requerido, exactamente `hombre` o `mujer`, **y igual al directorio que lo contiene**                                                                                        |
+| `family`        | requerido, no vacío                                                                                                                                                         |
+| `notes`         | requerido, entre 1 y 8 cadenas no vacías                                                                                                                                    |
+| `sizeMl`        | requerido, entero, 1–1000                                                                                                                                                   |
+| `priceBob`      | requerido, entero, 1–100000                                                                                                                                                 |
+| `concentration` | requerido, uno de `Eau de parfum` o `Eau de toilette`                                                                                                                       |
+| `summary`       | requerido, 30–110 caracteres — ver más abajo                                                                                                                                |
+| `description`   | requerido, mínimo 80 caracteres                                                                                                                                             |
+| `featured`      | requerido, booleano                                                                                                                                                         |
+| `inStock`       | requerido, booleano                                                                                                                                                         |
+| `order`         | requerido, entero 0–999, por defecto 100                                                                                                                                    |
+| `photo`         | opcional; `^/img/perfumes/[a-z0-9-]+\.(webp\|jpg\|png)$` **y el archivo debe existir**. El CMS siempre sube `.webp`; los otros dos se admiten para archivos añadidos a mano |
 
 Cualquier clave desconocida es un error, no un campo ignorado: un `precioBob` mal escrito debe
 gritar, no desaparecer en silencio.
+
+### La meta description es compuesta, y ese es el límite real
+
+`perfume-detail` no usa `summary` como meta description: la compone.
+
+```
+`${perfume.summary} ${perfume.concentration} de ${perfume.sizeMl} ml por Bs ${perfume.priceBob} en Cochabamba.`
+```
+
+La cola añade unos 50 caracteres. Poner el límite en `summary` sería medir la pieza equivocada, así
+que **el validador comprueba la cadena compuesta contra el máximo de 160** y deja a `summary` un
+rango holgado de 30 a 110.
+
+Los `summary` actuales miden entre 35 y 51 caracteres, y la meta description más larga que producen
+son 101. Un mínimo de 40 en `summary` —que es lo que este spec decía antes de revisarse— habría
+rechazado seis de los doce perfumes existentes y roto la migración el primer día. El rango va
+medido contra los datos reales, no contra una cifra redonda.
 
 ### El orden de presentación
 
@@ -190,12 +220,16 @@ escribir un producto de build `*.generated.*` bajo `src/`, nunca un archivo fuen
 `ignores` de ESLint, y `perfumes.data.ts` desaparece. Todo lo que hoy importa `perfumes.data`
 —`catalog.ts`, `app.routes.server.ts`, `generate-sitemap.ts`— pasa a importar el generado.
 
+Con esto, un clon recién hecho **no compila hasta la primera generación**, igual que hoy no tiene
+las hojas de Arena. `prestart`, `prebuild` y `pretest` ya lo cubren; hay que añadir `prelint` para
+que `bun run lint` no sea el único comando que se encuentre el archivo ausente.
+
 ## `inStock` en la interfaz y en el SEO
 
-- **`perfume-card`**: distintivo *Agotado* cuando `inStock` es falso. Tono neutro, no dorado: la
+- **`perfume-card`**: distintivo _Agotado_ cuando `inStock` es falso. Tono neutro, no dorado: la
   regla de un solo acento por vista se mantiene, y el oro es distinción, no aviso.
-- **`perfume-detail`**: el mismo distintivo, y el CTA de WhatsApp cambia su copia a *Consultar
-  disponibilidad*.
+- **`perfume-detail`**: el mismo distintivo, y el CTA de WhatsApp cambia su copia a _Consultar
+  disponibilidad_.
 - **JSON-LD**: `availability` pasa de la constante `https://schema.org/InStock` a depender del
   campo, con `https://schema.org/OutOfStock` en el otro caso.
 - **Un perfume agotado sigue listado, prerenderizado y en el sitemap.** Una ficha que dice
@@ -218,15 +252,18 @@ la prohibición de comentarios del proyecto. No es código nuestro.
 Lo que el generador comprueba tarde, el formulario lo hace imposible temprano:
 
 - `required: true` en todos los campos.
-- `select` para `line` y `concentration`: conjuntos cerrados que se vuelven desplegables, imposibles
-  de escribir mal. El conjunto de `concentration` se extrae de los datos actuales y se declara en
-  `config.yml`; ampliarlo es editar esa lista y el validador a la vez.
+- `select` para `concentration`, con las dos opciones que existen hoy: `Eau de parfum` y
+  `Eau de toilette`. Ampliarlas es editar esa lista y el validador a la vez.
+- `line` no es un campo: es un valor oculto con el valor por defecto de su colección. Una colección
+  por línea, cada una apuntando a su directorio.
 - `pattern` en el slug, con mensaje en español.
 - `value_type: int` con `min`/`max` en `sizeMl` y `priceBob`.
 - `list` con `min: 1, max: 8` para las notas.
 - `boolean` con `default: true` en `inStock` y `default: false` en `featured`.
 - `number` con `default: 100` en `order`, para que el orden no sea una decisión que deba tomar.
 - El nombre del archivo se deriva del propio campo slug, así que no pueden discrepar.
+- Medios: `media_folder: public/img/perfumes` con `public_folder: /img/perfumes`, para que la ruta
+  que el CMS escribe en `photo` sea exactamente la que el validador y las plantillas esperan.
 - Medios: `max_file_size`, `slugify_filename: true` y `transformations` a webp con ancho máximo y
   calidad — la conversión ocurre en el navegador del dueño antes de subir, así que un JPEG de 5 MB
   no llega nunca al repositorio.
@@ -236,7 +273,7 @@ Lo que el generador comprueba tarde, el formulario lo hace imposible temprano:
 ## Autenticación
 
 **Montaje, una vez.** El dueño tiene cuenta de GitHub y es colaborador con permiso de escritura. Se
-registra una OAuth App con *Homepage* en el dominio y *callback* en `https://auth.<dominio>/callback`.
+registra una OAuth App con _Homepage_ en el dominio y _callback_ en `https://auth.<dominio>/callback`.
 El dominio aún no está comprado; `SITE_ORIGIN` ya vale `https://fragancia.com.bo` y el resto del
 árbol asume esa raíz, así que si el dominio elegido es otro hay que cambiar `site.ts`, `robots.txt`
 y las dos URL de la OAuth App a la vez.
@@ -244,7 +281,7 @@ El cliente OAuth se despliega como segunda aplicación en Dokploy con el client 
 dominio permitido como variables de entorno. `config.yml` apunta a `repo`, `branch: main` y
 `base_url`.
 
-**Uso, cada vez.** Entra a `/admin/`, pulsa *Iniciar sesión con GitHub*, autoriza la aplicación la
+**Uso, cada vez.** Entra a `/admin/`, pulsa _Iniciar sesión con GitHub_, autoriza la aplicación la
 primera vez, y la sesión queda en su navegador. Edita un formulario y guarda. Nunca ve un commit ni
 una rama.
 
@@ -258,6 +295,12 @@ y una página estática no puede guardar un secreto. El proxy existe para ese ú
 guarda usuarios ni tiene base de datos.
 
 **Revocar el acceso** es quitarlo de colaboradores del repositorio.
+
+**No hay entorno de pruebas.** El CMS escribe directo a `main` y `main` es lo que se despliega. Se
+acepta a conciencia: para un usuario, una rama intermedia es ceremonia. El seguro no es un staging,
+es que cada guardado es un commit suyo, así que **deshacer un desastre de copia es revertir un
+commit**. Lo que el validador no puede juzgar —una descripción mal escrita, un precio real pero
+equivocado— lo arregla el historial.
 
 ## Despliegue
 
@@ -275,20 +318,22 @@ antes que el cliente.
 
 ## Defensa en capas
 
-| Qué puede romperse | Qué lo detiene |
-| --- | --- |
-| Campo obligatorio vacío | Formulario (`required`) |
-| Línea o concentración mal escrita | Formulario (`select`) |
-| Precio como texto, o negativo | Formulario (`value_type`, `min`) y generador |
-| Slug con espacios, mayúsculas o tildes | Formulario (`pattern`) y generador |
-| Slug duplicado en una línea | Generador y `catalog.spec.ts` |
-| Slug que no coincide con el archivo | Generador |
-| Clave mal escrita en el YAML | Generador (claves desconocidas) |
-| `photo` apuntando a un archivo inexistente | Generador (comprobación en disco) |
-| Foto de 5 MB | Formulario (`max_file_size`, `transformations`) |
-| Quedarse sin destacados o sin línea | Generador (reglas entre archivos) |
-| Reordenar la parrilla sin querer | Campo `order` con valor por defecto y orden determinista |
-| Cualquier cosa que se cuele | El build falla y Dokploy conserva la versión anterior |
+| Qué puede romperse                               | Qué lo detiene                                           |
+| ------------------------------------------------ | -------------------------------------------------------- |
+| Campo obligatorio vacío                          | Formulario (`required`)                                  |
+| Línea o concentración mal escrita                | Formulario (`select`)                                    |
+| Precio como texto, o negativo                    | Formulario (`value_type`, `min`) y generador             |
+| Slug con espacios, mayúsculas o tildes           | Formulario (`pattern`) y generador                       |
+| Slug duplicado en una línea                      | Generador y `catalog.spec.ts`                            |
+| Slug que no coincide con el archivo              | Generador                                                |
+| Clave mal escrita en el YAML                     | Generador (claves desconocidas)                          |
+| `photo` apuntando a un archivo inexistente       | Generador (comprobación en disco)                        |
+| Foto de 5 MB                                     | Formulario (`max_file_size`, `transformations`)          |
+| Quedarse sin destacados o sin línea              | Generador (reglas entre archivos)                        |
+| Meta description pasada de 160                   | Generador (mide la cadena compuesta, no `summary`)       |
+| Dos fichas con el mismo slug en líneas distintas | El directorio por línea las separa                       |
+| Reordenar la parrilla sin querer                 | Campo `order` con valor por defecto y orden determinista |
+| Cualquier cosa que se cuele                      | El build falla y Dokploy conserva la versión anterior    |
 
 ## Tests
 
