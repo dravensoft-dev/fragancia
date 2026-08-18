@@ -1,4 +1,4 @@
-import { Perfume, PerfumeLine } from './perfume.model';
+import { LineProfile, Perfume, PerfumeLine } from './perfume.model';
 import { META_DESCRIPTION_MAX, metaDescriptionOf } from './perfume-meta';
 
 export const LINE_NAMES: readonly PerfumeLine[] = ['hombre', 'mujer'];
@@ -237,6 +237,233 @@ export function validatePerfume(candidate: PerfumeCandidate, rules: CatalogRules
   };
 
   return { issues: [], perfume };
+}
+
+export const LINE_KEYS: readonly string[] = [
+  'line',
+  'path',
+  'label',
+  'descriptor',
+  'sloganLead',
+  'slogan',
+  'lede',
+  'metaDescription',
+  'rosegold',
+];
+
+export interface LineCandidate {
+  readonly file: string;
+  readonly line: string;
+  readonly value: unknown;
+}
+
+export interface LineResult {
+  readonly issues: readonly CatalogIssue[];
+  readonly profile?: LineProfile;
+}
+
+export function validateLine(candidate: LineCandidate): LineResult {
+  const value = asRecord(candidate.value);
+
+  if (!value) {
+    return { issues: [{ file: candidate.file, message: 'file: expected a mapping of fields' }] };
+  }
+
+  const messages: string[] = [];
+
+  for (const key of Object.keys(value)) {
+    if (!LINE_KEYS.includes(key)) {
+      messages.push(`${key}: unknown field`);
+    }
+  }
+
+  const line = asLine(value['line']);
+
+  if (line === undefined) {
+    messages.push(
+      `line: expected one of ${LINE_NAMES.join(', ')}, received ${shown(value['line'])}`,
+    );
+  } else if (line !== candidate.line) {
+    messages.push(`line: ${shown(line)} does not match the file name ${shown(candidate.line)}`);
+  }
+
+  const path = asText(value['path']);
+  const expected = `/perfumes/${candidate.line}`;
+
+  if (path !== expected) {
+    messages.push(`path: expected ${shown(expected)}, received ${shown(value['path'])}`);
+  }
+
+  const copy: Record<string, string | undefined> = {};
+
+  for (const key of ['label', 'descriptor', 'sloganLead', 'slogan', 'lede']) {
+    copy[key] = asText(value[key]);
+
+    if (copy[key] === undefined) {
+      messages.push(`${key}: expected a non-empty string, received ${shown(value[key])}`);
+    }
+  }
+
+  const metaDescription = asText(value['metaDescription']);
+
+  if (
+    metaDescription === undefined ||
+    metaDescription.length < 50 ||
+    metaDescription.length > META_DESCRIPTION_MAX
+  ) {
+    messages.push(
+      `metaDescription: expected 50 to ${META_DESCRIPTION_MAX} characters, received ${sized(value['metaDescription'])}`,
+    );
+  }
+
+  const rosegold = asBoolean(value['rosegold']);
+
+  if (rosegold === undefined) {
+    messages.push(`rosegold: expected true or false, received ${shown(value['rosegold'])}`);
+  }
+
+  if (messages.length > 0) {
+    return { issues: messages.map((message) => ({ file: candidate.file, message })) };
+  }
+
+  const { label, descriptor, sloganLead, slogan, lede } = copy;
+
+  if (
+    line === undefined ||
+    path === undefined ||
+    label === undefined ||
+    descriptor === undefined ||
+    sloganLead === undefined ||
+    slogan === undefined ||
+    lede === undefined ||
+    metaDescription === undefined ||
+    rosegold === undefined
+  ) {
+    return { issues: [{ file: candidate.file, message: 'file: incomplete record' }] };
+  }
+
+  return {
+    issues: [],
+    profile: {
+      line,
+      path,
+      label,
+      descriptor,
+      sloganLead,
+      slogan,
+      lede,
+      metaDescription,
+      rosegold,
+    },
+  };
+}
+
+export interface CatalogValidation {
+  readonly issues: readonly CatalogIssue[];
+  readonly lines: readonly LineProfile[];
+  readonly perfumes: readonly Perfume[];
+}
+
+export function validateCatalog(
+  lineCandidates: readonly LineCandidate[],
+  perfumeCandidates: readonly PerfumeCandidate[],
+  rules: CatalogRules,
+): CatalogValidation {
+  const issues: CatalogIssue[] = [];
+  const profiles: LineProfile[] = [];
+  const perfumes: Perfume[] = [];
+  const seen = new Map<string, string>();
+
+  for (const candidate of lineCandidates) {
+    const result = validateLine(candidate);
+
+    issues.push(...result.issues);
+
+    if (result.profile) {
+      profiles.push(result.profile);
+    }
+  }
+
+  for (const candidate of perfumeCandidates) {
+    const result = validatePerfume(candidate, rules);
+
+    issues.push(...result.issues);
+
+    const perfume = result.perfume;
+
+    if (perfume === undefined) {
+      continue;
+    }
+
+    const key = `${perfume.line}/${perfume.slug}`;
+    const first = seen.get(key);
+
+    if (first !== undefined) {
+      issues.push({
+        file: candidate.file,
+        message: `slug: ${shown(perfume.slug)} is already used in ${first}`,
+      });
+      continue;
+    }
+
+    seen.set(key, candidate.file);
+
+    if (!profiles.some((profile) => profile.line === perfume.line)) {
+      issues.push({
+        file: candidate.file,
+        message: `line: ${shown(perfume.line)} has no profile in content/lines`,
+      });
+    }
+
+    perfumes.push(perfume);
+  }
+
+  for (const profile of profiles) {
+    const inLine = perfumes.filter((perfume) => perfume.line === profile.line);
+
+    if (inLine.length === 0) {
+      issues.push({
+        file: `content/lines/${profile.line}.yml`,
+        message: 'line: no perfume belongs to this line',
+      });
+      continue;
+    }
+
+    if (!inLine.some((perfume) => perfume.featured)) {
+      issues.push({
+        file: 'catalog',
+        message: `featured: line ${shown(profile.line)} has no featured perfume`,
+      });
+    }
+  }
+
+  const featured = perfumes.filter((perfume) => perfume.featured).length;
+
+  if (featured < 2 || featured > 8) {
+    issues.push({
+      file: 'catalog',
+      message: `featured: expected between 2 and 8 featured perfumes, found ${featured}`,
+    });
+  }
+
+  if (issues.length > 0) {
+    return { issues, lines: [], perfumes: [] };
+  }
+
+  return { issues, lines: sortLines(profiles), perfumes: sortPerfumes(perfumes) };
+}
+
+export function sortLines(profiles: readonly LineProfile[]): readonly LineProfile[] {
+  return [...profiles].sort((a, b) => LINE_NAMES.indexOf(a.line) - LINE_NAMES.indexOf(b.line));
+}
+
+export function sortPerfumes(perfumes: readonly Perfume[]): readonly Perfume[] {
+  return [...perfumes].sort(
+    (a, b) =>
+      LINE_NAMES.indexOf(a.line) - LINE_NAMES.indexOf(b.line) ||
+      a.order - b.order ||
+      a.name.localeCompare(b.name, 'es'),
+  );
 }
 
 function asRecord(value: unknown): Record<string, unknown> | undefined {

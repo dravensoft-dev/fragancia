@@ -1,4 +1,13 @@
-import { CatalogRules, PerfumeCandidate, validatePerfume } from './catalog.schema';
+import {
+  CatalogRules,
+  LineCandidate,
+  PerfumeCandidate,
+  sortPerfumes,
+  validateCatalog,
+  validateLine,
+  validatePerfume,
+} from './catalog.schema';
+import { Perfume } from './perfume.model';
 
 const RULES: CatalogRules = { photoExists: (photo) => photo === '/img/perfumes/yara.webp' };
 
@@ -215,5 +224,236 @@ describe('validatePerfume', () => {
     const result = validatePerfume(candidate({ brand: '', family: '', order: -1 }), RULES);
 
     expect(result.issues).toHaveLength(3);
+  });
+});
+
+const VALID_LINE: Record<string, unknown> = {
+  line: 'mujer',
+  path: '/perfumes/mujer',
+  label: 'Perfumes para mujer',
+  descriptor: 'Femme',
+  sloganLead: 'La elegancia',
+  slogan: 'se lleva en la piel.',
+  lede: 'Floral, frutal y almizcle. La línea femenina de la casa.',
+  metaDescription:
+    'Perfumes árabes para mujer en Cochabamba: Lattafa, Rasasi y Armaf. Eau de parfum original.',
+  rosegold: true,
+};
+
+function lineCandidate(
+  overrides: Record<string, unknown> = {},
+  patch: Partial<LineCandidate> = {},
+): LineCandidate {
+  return {
+    file: 'content/lines/mujer.yml',
+    line: 'mujer',
+    value: { ...VALID_LINE, ...overrides },
+    ...patch,
+  };
+}
+
+function lineReported(
+  overrides: Record<string, unknown> = {},
+  patch: Partial<LineCandidate> = {},
+): string {
+  return validateLine(lineCandidate(overrides, patch))
+    .issues.map((issue) => issue.message)
+    .join('\n');
+}
+
+describe('validateLine', () => {
+  it('returns the typed profile and no issue for a valid file', () => {
+    const result = validateLine(lineCandidate());
+
+    expect(result.issues).toEqual([]);
+    expect(result.profile?.line).toBe('mujer');
+    expect(result.profile?.rosegold).toBe(true);
+  });
+
+  it('shouts at a misspelled key', () => {
+    expect(lineReported({ eslogan: 'x' })).toContain('eslogan: unknown field');
+  });
+
+  it('takes a line from the closed set and matching the file name', () => {
+    expect(lineReported({ line: 'unisex' })).toContain('line: expected one of hombre, mujer');
+    expect(lineReported({ line: 'hombre', path: '/perfumes/hombre' })).toContain(
+      'line: "hombre" does not match the file name "mujer"',
+    );
+  });
+
+  it('derives the path from the line', () => {
+    expect(lineReported({ path: '/mujer' })).toContain(
+      'path: expected "/perfumes/mujer", received "/mujer"',
+    );
+  });
+
+  it('requires every piece of copy the page reads', () => {
+    expect(lineReported({ label: '' })).toContain('label: expected a non-empty string');
+    expect(lineReported({ descriptor: '' })).toContain('descriptor: expected a non-empty string');
+    expect(lineReported({ sloganLead: '' })).toContain('sloganLead: expected a non-empty string');
+    expect(lineReported({ slogan: '' })).toContain('slogan: expected a non-empty string');
+    expect(lineReported({ lede: '' })).toContain('lede: expected a non-empty string');
+  });
+
+  it('takes a meta description of 50 to 160 characters', () => {
+    expect(lineReported({ metaDescription: 'x'.repeat(50) })).toBe('');
+    expect(lineReported({ metaDescription: 'x'.repeat(49) })).toContain(
+      'metaDescription: expected 50 to 160 characters, received 49 characters',
+    );
+    expect(lineReported({ metaDescription: 'x'.repeat(161) })).toContain(
+      'metaDescription: expected 50 to 160 characters',
+    );
+  });
+
+  it('takes rosegold as a boolean', () => {
+    expect(lineReported({ rosegold: 'sí' })).toContain('rosegold: expected true or false');
+  });
+});
+
+describe('validateCatalog', () => {
+  const RULES_ALL: CatalogRules = { photoExists: () => true };
+
+  function perfumeIn(line: string, slug: string, overrides: Record<string, unknown> = {}) {
+    return {
+      file: `content/perfumes/${line}/${slug}.yml`,
+      line,
+      slug,
+      value: { ...VALID, slug, line, ...overrides },
+    };
+  }
+
+  function lineIn(line: string) {
+    return {
+      file: `content/lines/${line}.yml`,
+      line,
+      value: {
+        ...VALID_LINE,
+        line,
+        path: `/perfumes/${line}`,
+        rosegold: line === 'mujer',
+      },
+    };
+  }
+
+  const HEALTHY = {
+    lines: [lineIn('hombre'), lineIn('mujer')],
+    perfumes: [
+      perfumeIn('hombre', 'khamrah', { featured: true, order: 10 }),
+      perfumeIn('hombre', 'asad', { featured: false, order: 20 }),
+      perfumeIn('mujer', 'yara', { featured: true, order: 10 }),
+      perfumeIn('mujer', 'najdia', { featured: false, order: 20 }),
+    ],
+  };
+
+  function messagesOf(validation: { issues: readonly { message: string }[] }): string {
+    return validation.issues.map((issue) => issue.message).join('\n');
+  }
+
+  it('returns both typed lists when everything holds', () => {
+    const result = validateCatalog(HEALTHY.lines, HEALTHY.perfumes, RULES_ALL);
+
+    expect(result.issues).toEqual([]);
+    expect(result.lines.map((profile) => profile.line)).toEqual(['hombre', 'mujer']);
+    expect(result.perfumes.map((perfume) => perfume.slug)).toEqual([
+      'khamrah',
+      'asad',
+      'yara',
+      'najdia',
+    ]);
+  });
+
+  it('returns no record at all when anything fails', () => {
+    const result = validateCatalog(
+      HEALTHY.lines,
+      [...HEALTHY.perfumes, perfumeIn('mujer', 'yara')],
+      RULES_ALL,
+    );
+
+    expect(result.perfumes).toEqual([]);
+    expect(result.lines).toEqual([]);
+  });
+
+  it('refuses a slug repeated inside a line and names the first file', () => {
+    const result = validateCatalog(
+      HEALTHY.lines,
+      [...HEALTHY.perfumes, perfumeIn('mujer', 'yara')],
+      RULES_ALL,
+    );
+
+    expect(messagesOf(result)).toContain(
+      'slug: "yara" is already used in content/perfumes/mujer/yara.yml',
+    );
+  });
+
+  it('allows the same slug in two different lines', () => {
+    const result = validateCatalog(
+      HEALTHY.lines,
+      [...HEALTHY.perfumes, perfumeIn('hombre', 'yara')],
+      RULES_ALL,
+    );
+
+    expect(result.issues).toEqual([]);
+  });
+
+  it('refuses a line with no perfume', () => {
+    const result = validateCatalog(
+      HEALTHY.lines,
+      HEALTHY.perfumes.filter((perfume) => perfume.line === 'mujer'),
+      RULES_ALL,
+    );
+
+    expect(messagesOf(result)).toContain('line: no perfume belongs to this line');
+  });
+
+  it('refuses a perfume whose line has no profile', () => {
+    const result = validateCatalog([lineIn('mujer')], HEALTHY.perfumes, RULES_ALL);
+
+    expect(messagesOf(result)).toContain('line: "hombre" has no profile in content/lines');
+  });
+
+  it('keeps the featured count between 2 and 8', () => {
+    const single = validateCatalog(
+      HEALTHY.lines,
+      HEALTHY.perfumes.map((perfume) => ({
+        ...perfume,
+        value: { ...perfume.value, featured: false },
+      })),
+      RULES_ALL,
+    );
+
+    expect(messagesOf(single)).toContain(
+      'featured: expected between 2 and 8 featured perfumes, found 0',
+    );
+  });
+
+  it('requires a featured perfume in every line', () => {
+    const result = validateCatalog(
+      HEALTHY.lines,
+      HEALTHY.perfumes.map((perfume) =>
+        perfume.line === 'hombre'
+          ? { ...perfume, value: { ...perfume.value, featured: false } }
+          : { ...perfume, value: { ...perfume.value, featured: true } },
+      ),
+      RULES_ALL,
+    );
+
+    expect(messagesOf(result)).toContain('featured: line "hombre" has no featured perfume');
+  });
+});
+
+describe('sortPerfumes', () => {
+  function perfume(line: 'hombre' | 'mujer', name: string, order: number): Perfume {
+    return { ...(VALID as unknown as Perfume), line, name, slug: name.toLowerCase(), order };
+  }
+
+  it('orders by line, then by order, then by name', () => {
+    const sorted = sortPerfumes([
+      perfume('mujer', 'Yara', 20),
+      perfume('hombre', 'Asad', 20),
+      perfume('mujer', 'Ameerati', 20),
+      perfume('hombre', 'Khamrah', 10),
+    ]);
+
+    expect(sorted.map((entry) => entry.name)).toEqual(['Khamrah', 'Asad', 'Ameerati', 'Yara']);
   });
 });
