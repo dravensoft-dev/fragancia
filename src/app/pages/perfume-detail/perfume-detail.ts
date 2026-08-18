@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, computed, effect, inject, input } f
 import { Router } from '@angular/router';
 import { ArenaMetadataService } from '@dravensoft/arena-angular/metadata';
 import {
+  ArenaBadge,
   ArenaBreadcrumbs,
   ArenaCrumb,
   ArenaFallback,
@@ -34,6 +35,7 @@ import {
     ArenaFallback,
     ArenaKeyValue,
     ArenaTag,
+    ArenaBadge,
     StructuredData,
   ],
   templateUrl: './perfume-detail.html',
@@ -99,6 +101,10 @@ export class PerfumeDetail {
     numeric: true,
   }));
 
+  protected readonly cta = computed(() =>
+    this.perfume().inStock ? `Consultar por ${this.perfume().name}` : 'Consultar disponibilidad',
+  );
+
   protected readonly productSchema = computed<Record<string, unknown>>(() => ({
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -117,7 +123,9 @@ export class PerfumeDetail {
       url: `${SITE_ORIGIN}${this.path()}`,
       price: this.perfume().priceBob,
       priceCurrency: PRICE_CURRENCY,
-      availability: 'https://schema.org/InStock',
+      availability: this.perfume().inStock
+        ? 'https://schema.org/InStock'
+        : 'https://schema.org/OutOfStock',
       itemCondition: 'https://schema.org/NewCondition',
       seller: { '@type': 'Store', name: SITE_NAME },
     },

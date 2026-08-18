@@ -25,6 +25,12 @@
       <h1 class="detail__name">{{ perfume().name }}</h1>
       <p class="detail__summary">{{ perfume().summary }}</p>
 
+      @if (!perfume().inStock) {
+        <p class="detail__stock">
+          <arena-badge tone="neutral">Agotado</arena-badge>
+        </p>
+      }
+
       <ul class="detail__notes arena-row">
         @for (note of perfume().notes; track note) {
           <li>
@@ -39,7 +45,7 @@
 
       <a [href]="whatsapp" rel="noopener" target="_blank" class="detail__cta">
         <i class="ph-bold ph-whatsapp-logo" aria-hidden="true"></i>
-        <span>Consultar por {{ perfume().name }}</span>
+        <span>{{ cta() }}</span>
       </a>
     </div>
   </div>

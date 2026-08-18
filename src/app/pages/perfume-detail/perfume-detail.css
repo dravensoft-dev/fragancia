@@ -38,6 +38,10 @@
   color: color-mix(in oklab, var(--ink-body) var(--level-ink-body), transparent);
 }
 
+.detail__stock {
+  margin: 0;
+}
+
 .detail__notes {
   margin: 0;
   padding: 0;
