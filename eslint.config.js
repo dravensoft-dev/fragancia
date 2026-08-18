@@ -6,7 +6,12 @@ const prettier = require('eslint-config-prettier/flat');
 
 module.exports = defineConfig([
   {
-    ignores: ['dist/**', 'src/*.generated.css', 'public/sitemap.xml'],
+    ignores: [
+      'dist/**',
+      'src/*.generated.css',
+      'src/app/catalog/perfumes.generated.ts',
+      'public/sitemap.xml',
+    ],
   },
   {
     files: ['**/*.ts'],
