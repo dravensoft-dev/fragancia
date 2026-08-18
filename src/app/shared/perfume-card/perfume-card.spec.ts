@@ -17,6 +17,8 @@ const PERFUME: Perfume = {
   summary: 'Un oriental dulce.',
   description: 'Un oriental dulce de orquídea y vainilla.',
   featured: true,
+  inStock: true,
+  order: 100,
   photo: '/img/perfumes/yara.webp',
 };
 

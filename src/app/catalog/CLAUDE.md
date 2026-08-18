@@ -9,7 +9,9 @@ accessor (`catalog.ts`).
   every lookup is made by. Adding a third line means touching the routes, the server routes, the
   sitemap and the header nav.
 - `Perfume` is flat and entirely `readonly`. `featured` drives the landing grid; `line` + `slug` is
-  the identity; `priceBob` is a number in bolivianos and is formatted at the call site as `Bs {n}`.
+  the identity; `priceBob` is a number in bolivianos and is formatted at the call site as `Bs {n}`;
+  `inStock` is a boolean and never a count, so `offers.availability` is true in the prerendered
+  HTML; `order` is the presentation rank inside a line, ascending, ties broken by `name`.
 - `LineProfile` carries the copy a line owns: `label`, `descriptor`, `lede`, `sloganLead` +
   `slogan`, `metaDescription`, and `rosegold`. **`rosegold` is what puts `.arena-femme` on the
   page** — it is a data flag, not a check against `line === 'mujer'`.

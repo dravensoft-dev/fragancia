@@ -13,6 +13,8 @@ export interface Perfume {
   readonly summary: string;
   readonly description: string;
   readonly featured: boolean;
+  readonly inStock: boolean;
+  readonly order: number;
   readonly photo?: string;
 }
 

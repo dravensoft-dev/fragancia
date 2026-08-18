@@ -42,6 +42,8 @@ export const PERFUMES: readonly Perfume[] = [
     description:
       'La casa lo vende más que ningún otro. Abre dulce y especiado, con el dátil por delante, y termina en una base de benjuí y vainilla que se queda en la ropa hasta el día siguiente. Para la noche fría de Cochabamba.',
     featured: true,
+    inStock: true,
+    order: 10,
     photo: '/img/perfumes/9pm.webp',
   },
   {
@@ -58,6 +60,8 @@ export const PERFUMES: readonly Perfume[] = [
     description:
       'El más pedido de Armaf y la puerta de entrada a la perfumería árabe. La piña de la salida da paso a un abedul ahumado sobre ámbar gris. Proyecta mucho: media aplicación basta.',
     featured: true,
+    inStock: true,
+    order: 20,
     photo: '/img/perfumes/club-de-nuit-intense-man.webp',
   },
   {
@@ -74,6 +78,8 @@ export const PERFUMES: readonly Perfume[] = [
     description:
       'Seco, amargo y masculino sin esfuerzo. El café domina la primera hora y el cedro sostiene el resto. Rinde de sobra para oficina y para salida.',
     featured: false,
+    inStock: true,
+    order: 30,
     photo: '/img/perfumes/club-de-nuit-intense-man.webp',
   },
   {
@@ -90,6 +96,8 @@ export const PERFUMES: readonly Perfume[] = [
     description:
       'El más versátil de la selección masculina. Acuático y afrutado en la salida, con una canela que sólo aparece a media tarde. El que se regala cuando no se conoce el gusto de la persona.',
     featured: false,
+    inStock: true,
+    order: 40,
     photo: '/img/perfumes/hawas-for-him.webp',
   },
   {
@@ -106,6 +114,8 @@ export const PERFUMES: readonly Perfume[] = [
     description:
       'Pensado para la noche y honesto con su nombre. La lavanda le quita el exceso de dulzor a la manzana y la haba tonka cierra en cálido. Relación precio y rendimiento difícil de igualar.',
     featured: false,
+    inStock: true,
+    order: 50,
     photo: '/img/perfumes/9pm.webp',
   },
   {
@@ -122,6 +132,8 @@ export const PERFUMES: readonly Perfume[] = [
     description:
       'La opción sobria de la línea. Sin salida dulce y sin estridencias: bergamota, ámbar y un vetiver terroso que aguanta la jornada. Para quien no quiere que su perfume entre antes que él.',
     featured: false,
+    inStock: true,
+    order: 60,
     photo: '/img/perfumes/hawas-for-him.webp',
   },
   {
@@ -138,6 +150,8 @@ export const PERFUMES: readonly Perfume[] = [
     description:
       'El femenino más vendido de la casa y el que más gente pregunta por su nombre en la calle. Dulce sin empalagar, con un almizcle que lo sostiene toda la tarde.',
     featured: true,
+    inStock: true,
+    order: 10,
     photo: '/img/perfumes/club-de-nuit-woman.webp',
   },
   {
@@ -154,6 +168,8 @@ export const PERFUMES: readonly Perfume[] = [
     description:
       'La versión femenina del Hawas, y la más elegante de la línea. Afrutada en la salida, floral en el corazón y ambarada en el fondo. Va igual de bien a la oficina que a una boda.',
     featured: true,
+    inStock: true,
+    order: 20,
     photo: '/img/perfumes/blue-lady-2.webp',
   },
   {
@@ -170,6 +186,8 @@ export const PERFUMES: readonly Perfume[] = [
     description:
       'Chipre clásico leído en clave árabe. La rosa y el pachulí le dan carácter y la pera evita que resulte severo. El femenino de mayor proyección del catálogo.',
     featured: false,
+    inStock: true,
+    order: 30,
     photo: '/img/perfumes/club-de-nuit-woman.webp',
   },
   {
@@ -186,6 +204,8 @@ export const PERFUMES: readonly Perfume[] = [
     description:
       'Ligero, fresco y sin pretensiones. El que se usa a diario y no cansa. Buen primer perfume árabe para quien viene de fragancias comerciales.',
     featured: false,
+    inStock: true,
+    order: 40,
     photo: '/img/perfumes/club-de-nuit-woman.webp',
   },
   {
@@ -202,6 +222,8 @@ export const PERFUMES: readonly Perfume[] = [
     description:
       'Suave y cercano, de los que se perciben a un brazo de distancia y no más. Pensado para oficina y para clima cálido, donde un ambarado pesaría.',
     featured: false,
+    inStock: true,
+    order: 50,
     photo: '/img/perfumes/blue-lady-2.webp',
   },
   {
@@ -218,6 +240,8 @@ export const PERFUMES: readonly Perfume[] = [
     description:
       'Un clásico de Rasasi que lleva décadas vendiéndose. Frutal luminoso arriba, sándalo cremoso abajo. El femenino más pedido por las clientas mayores de la casa.',
     featured: false,
+    inStock: true,
+    order: 60,
     photo: '/img/perfumes/blue-lady-2.webp',
   },
 ];
