@@ -20,6 +20,13 @@ so the previously deployed site stays up.
 Sveltia CMS (vendored), Dokploy.
 
 **Spec:** `docs/superpowers/specs/2026-08-18-admin-cms-design.md` — read it before Task 1. The plan
+
+**Estado (2026-08-18):** las fases 1 a 4 están hechas, verificadas y commiteadas en la rama
+`admin-cms`. Las tareas 1 a 12 están cerradas, incluido el ensayo del panel con navegador y la
+decisión sobre el borrado. **La fase 5 —tareas 13 a 16— se retoma con
+`docs/superpowers/plans/2026-08-18-fase-5-despliegue.md`**, que la reescribe como guía de operación
+para el equipo del cliente, con lo averiguado desde entonces: PKCE no está disponible para GitHub,
+así que el cliente OAuth es una elección entre tres y no entre dos.
 argues from it and never re-opens it.
 
 ---

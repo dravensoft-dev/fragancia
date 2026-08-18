@@ -25,6 +25,13 @@ Esto se leyó del bundle, no pulsando el botón: el ensayo con navegador seguía
 tomó la decisión. La conclusión que importa es que la pregunta del spec tenía respuesta —era
 deshabilitable— y que por tanto habilitarlo es una elección y no una imposición de la herramienta.
 
+El ensayo posterior lo confirmó de la peor manera posible, que también es la más informativa: con
+`delete: true` recién puesto, la primera ficha que desapareció del catálogo fue `hawas-for-her`, un
+perfume real, y no la de prueba. El build no se quejó, porque `yara` seguía destacada y la línea
+mujer seguía teniendo fichas, así que la regla se cumplía igual. Se recuperó con
+`git checkout -- content/perfumes/mujer/hawas-for-her.yml`. Es exactamente el escenario que este
+documento describe, y ocurrió a los cinco minutos de habilitarlo.
+
 ## La decisión
 
 **El borrado queda habilitado**, `delete: true` en las dos colecciones, a petición explícita del
