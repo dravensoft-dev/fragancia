@@ -15,6 +15,7 @@ import {
 } from '@dravensoft/arena-angular';
 import { Catalog } from '../../catalog/catalog';
 import { Perfume, PerfumeLine } from '../../catalog/perfume.model';
+import { metaDescriptionOf } from '../../catalog/perfume-meta';
 import { StructuredData } from '../../seo/structured-data';
 import {
   CONTACT_WHATSAPP_URL,
@@ -137,7 +138,7 @@ export class PerfumeDetail {
 
       this.metadata.apply({
         title: `${perfume.brand} ${perfume.name}`,
-        description: `${perfume.summary} ${perfume.concentration} de ${perfume.sizeMl} ml por Bs ${perfume.priceBob} en Cochabamba.`,
+        description: metaDescriptionOf(perfume),
         canonical: this.path(),
         image: perfume.photo ? `${SITE_ORIGIN}${perfume.photo}` : SITE_IMAGE,
         type: 'product',
