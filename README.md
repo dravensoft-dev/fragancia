@@ -196,6 +196,12 @@ build rechazaría tarde sea imposible temprano. Las fotos se convierten a WebP *
 dueño** antes de subirse, con tamaño y calidad limitados, así que un JPEG de 5 MB no llega nunca al
 repositorio.
 
+El panel permite borrar fichas, pero **retirar un perfume que se agotó es marcarlo como no
+disponible, no borrarlo**: la ficha sigue publicada y se marca _Agotado_, mientras que borrarla
+convierte en 404 una dirección que Google puede tener indexada. Borrar es para una ficha que no
+debería haber existido. La decisión está en
+`docs/superpowers/decisions/2026-08-18-record-deletion.md`.
+
 No hay entorno de pruebas: el panel escribe directo a `main` y `main` es lo que se despliega. Para
 un solo usuario una rama intermedia es ceremonia. El seguro es que cada guardado es un commit suyo,
 así que **deshacer un desastre es revertir un commit**.

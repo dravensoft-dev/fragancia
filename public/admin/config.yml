@@ -35,7 +35,7 @@ collections:
     extension: yml
     format: yaml
     create: true
-    delete: false
+    delete: true
     slug: '{{fields.slug}}'
     summary: '{{name}} · {{brand}}'
     fields:
@@ -149,7 +149,7 @@ collections:
     extension: yml
     format: yaml
     create: true
-    delete: false
+    delete: true
     slug: '{{fields.slug}}'
     summary: '{{name}} · {{brand}}'
     fields:
