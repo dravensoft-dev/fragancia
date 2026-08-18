@@ -12,8 +12,8 @@
   <div class="detail arena-row arena-row--component arena-row--start">
     <div class="detail__media">
       <arena-figure>
-        @if (perfume().photo) {
-          <img media [src]="perfume().photo" [alt]="alt()" decoding="async" />
+        @if (photo(); as source) {
+          <img media [src]="source" [alt]="alt()" decoding="async" />
         } @else {
           <i fallback class="ph-light ph-drop" aria-hidden="true"></i>
         }

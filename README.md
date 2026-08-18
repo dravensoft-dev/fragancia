@@ -170,6 +170,27 @@ repetir.
 
 Cambiar de dominio es una línea: `SITE_ORIGIN` en `src/app/seo/site.ts`.
 
+## Despliegue
+
+`.github/workflows/pages.yml` publica cada push a `main` en
+`dravensoft-dev.github.io/fragancia/`. Eso es una maqueta para enseñar el sitio, no el sitio: el
+ambiente final es `fragancia.com.bo` y el árbol sigue configurado para él —`SITE_ORIGIN` apunta al
+dominio real, `<base href>` es `/` y `robots.txt` permite todo.
+
+Lo que la maqueta necesita vive en el despliegue, no en el código:
+
+- el subpath es una bandera del build, `ng build --base-href=/fragancia/`, de la que Angular deriva
+  el `<base>` y cada `routerLink`;
+- las URL que escribimos nosotros —el `href` de la tarjeta, las migas, la foto— pasan por
+  `Location.prepareExternalUrl()`, que es la identidad en la raíz y por tanto no le cuesta nada a
+  producción;
+- `scripts/pages-preview.ts` reescribe lo único que la bandera no alcanza, los `url()` de las
+  fuentes en el CSS, y **duerme el SEO**: `noindex,nofollow` en cada página, `Disallow: /` en
+  `robots.txt` y ningún `sitemap.xml` en el artefacto.
+
+Así la maqueta se ve entera y no compite en Google con el sitio que todavía no existe. El canonical
+de cada página sigue señalando a `fragancia.com.bo`, que es lo que corresponde.
+
 ## Lo que falta
 
 Las fotografías de producto y la imagen de Open Graph. Ver `public/img/perfumes/README.md` y

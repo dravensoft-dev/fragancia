@@ -1,7 +1,7 @@
-<arena-card [href]="path()" (click)="open()">
+<arena-card [href]="href()" (click)="open()">
   <arena-figure>
-    @if (perfume().photo) {
-      <img media [src]="perfume().photo" [alt]="alt()" loading="lazy" decoding="async" />
+    @if (photo(); as source) {
+      <img media [src]="source" [alt]="alt()" loading="lazy" decoding="async" />
     } @else {
       <i fallback class="ph-light ph-drop" aria-hidden="true"></i>
     }

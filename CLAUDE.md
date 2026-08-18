@@ -101,6 +101,13 @@ bun run audit:arena    # arena-to-prod report over src and design, writes nothin
 bun run serve:static   # serves the build on :4173
 ```
 
+The Pages workflow adds two steps of its own, and they are not part of normal work:
+
+```bash
+bun run build --base-href=/fragancia/
+bun run scripts/pages-preview.ts /fragancia/
+```
+
 `prestart`, `prebuild` and `pretest` all run `prepare:assets`, which regenerates:
 
 - `public/sitemap.xml`, from `scripts/generate-sitemap.ts`;
@@ -119,6 +126,26 @@ bun run serve:static   # serves the build on :4173
 All four are in `.gitignore`, `.prettierignore` and the ESLint `ignores` list. To change what they
 contain, change their source — `arena.config.json`, `design/fragancia/`, or the catalogue — and run
 `bun run prepare:assets`.
+
+## GitHub Pages is the maquette, not the site
+
+`.github/workflows/pages.yml` publishes every push to `main` to
+`dravensoft-dev.github.io/fragancia/`. That is a showroom; `fragancia.com.bo` is the site.
+
+- **The tree stays configured for the root of the real domain.** `SITE_ORIGIN` is
+  `https://fragancia.com.bo`, `<base href>` is `/`, `robots.txt` allows everything. Do not move any
+  of it to github.io.
+- The subpath is a build flag and nothing else: `bun run build --base-href=/fragancia/`. Angular
+  rewrites `<base>` and every `routerLink` from it.
+- **A URL our own code writes must go through `Location.prepareExternalUrl()`**, because
+  `--base-href` reaches `routerLink` and nothing else. `perfume-card` does it for the card's `href`
+  and the photo; `perfume-detail` does it for the crumbs and the photo. It is the identity at the
+  root, so it costs production nothing, and `perfume-card.spec.ts` holds both cases. An `href` or a
+  `src` written as a bare `/…` in a template is a 404 in the maquette.
+- `ArenaBreadcrumbs` takes `href` already prefixed, so `goTo()` strips the base back off with
+  `Location.normalize()` before handing the path to the router.
+- Everything specific to the maquette — the font URLs the base href cannot reach, and the SEO going
+  to sleep — lives in `scripts/pages-preview.ts` and runs only in the workflow.
 
 ## Gotchas
 

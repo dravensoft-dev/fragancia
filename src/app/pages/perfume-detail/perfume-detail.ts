@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
 import { ArenaMetadataService } from '@dravensoft/arena-angular/metadata';
@@ -42,6 +43,7 @@ export class PerfumeDetail {
   private readonly catalog = inject(Catalog);
   private readonly router = inject(Router);
   private readonly metadata = inject(ArenaMetadataService);
+  private readonly location = inject(Location);
 
   readonly line = input.required<PerfumeLine>();
   readonly slug = input.required<string>();
@@ -69,9 +71,18 @@ export class PerfumeDetail {
     () => `Frasco de ${this.perfume().name} de ${this.perfume().brand}`,
   );
 
+  protected readonly photo = computed(() => {
+    const photo = this.perfume().photo;
+
+    return photo ? this.location.prepareExternalUrl(photo) : undefined;
+  });
+
   protected readonly crumbs = computed<readonly ArenaCrumb[]>(() => [
-    { label: 'Inicio', href: '/' },
-    { label: this.profile()?.label ?? '', href: this.profile()?.path ?? '/' },
+    { label: 'Inicio', href: this.location.prepareExternalUrl('/') },
+    {
+      label: this.profile()?.label ?? '',
+      href: this.location.prepareExternalUrl(this.profile()?.path ?? '/'),
+    },
     { label: this.perfume().name },
   ]);
 
@@ -129,7 +140,7 @@ export class PerfumeDetail {
 
   protected goTo(crumb: ArenaCrumb): void {
     if (crumb.href) {
-      void this.router.navigateByUrl(crumb.href);
+      void this.router.navigateByUrl(this.location.normalize(crumb.href) || '/');
     }
   }
 }
