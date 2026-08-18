@@ -48,6 +48,9 @@ workflow. None is invoked by hand in normal work.
     href, because `ng build --base-href` puts it there. A `@font-face` `url()` cannot: CSS resolves
     it against the stylesheet, not against `<base>`, so the four font URLs are rewritten here. This
     is the only path in the tree that `--base-href` does not reach.
+  - **drops `admin/` from the artefact.** The panel writes to the real repository through an OAuth
+    callback registered for the real domain; on the maquette it could only fail, and it should not
+    be offered at all.
   - **puts the SEO to sleep.** Every `robots` meta becomes `noindex,nofollow`, `robots.txt` becomes
     `Disallow: /`, and `sitemap.xml` is dropped from the artefact. GitHub Pages is the maquette, not
     the site; the real one is `fragancia.com.bo` and it is the one that gets indexed.

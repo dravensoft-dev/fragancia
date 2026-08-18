@@ -10,6 +10,8 @@ if (!basePath || !basePath.startsWith('/') || !basePath.endsWith('/')) {
 
 const browser = join(process.cwd(), 'dist', 'fragancia', 'browser');
 
+rmSync(join(browser, 'admin'), { recursive: true, force: true });
+
 function filesUnder(directory: string): string[] {
   return readdirSync(directory).flatMap((entry) => {
     const path = join(directory, entry);
