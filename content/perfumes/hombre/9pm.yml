@@ -1,0 +1,20 @@
+slug: "9pm"
+name: "9PM"
+brand: "Afnan"
+line: "hombre"
+family: "Oriental ambarado"
+notes:
+  - "Manzana"
+  - "Lavanda"
+  - "Canela"
+  - "Vainilla"
+  - "Haba tonka"
+sizeMl: 100
+priceBob: 340
+concentration: "Eau de parfum"
+summary: "Manzana y lavanda con una base de tonka y vainilla."
+description: "Pensado para la noche y honesto con su nombre. La lavanda le quita el exceso de dulzor a la manzana y la haba tonka cierra en cálido. Relación precio y rendimiento difícil de igualar."
+featured: false
+inStock: true
+order: 50
+photo: "/img/perfumes/9pm.webp"

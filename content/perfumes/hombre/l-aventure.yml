@@ -1,0 +1,20 @@
+slug: "l-aventure"
+name: "L'Aventure"
+brand: "Al Haramain"
+line: "hombre"
+family: "Amaderado aromático"
+notes:
+  - "Bergamota"
+  - "Canela"
+  - "Ámbar"
+  - "Vetiver"
+  - "Pachulí"
+sizeMl: 100
+priceBob: 300
+concentration: "Eau de parfum"
+summary: "Ámbar y vetiver, sobrio de principio a fin."
+description: "La opción sobria de la línea. Sin salida dulce y sin estridencias: bergamota, ámbar y un vetiver terroso que aguanta la jornada. Para quien no quiere que su perfume entre antes que él."
+featured: false
+inStock: true
+order: 60
+photo: "/img/perfumes/hawas-for-him.webp"

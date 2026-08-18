@@ -1,0 +1,20 @@
+slug: "hawas-for-him"
+name: "Hawas For Him"
+brand: "Rasasi"
+line: "hombre"
+family: "Fougère acuático"
+notes:
+  - "Bergamota"
+  - "Manzana"
+  - "Canela"
+  - "Ámbar"
+  - "Almizcle"
+sizeMl: 100
+priceBob: 560
+concentration: "Eau de parfum"
+summary: "Fresco y limpio, con una canela discreta detrás."
+description: "El más versátil de la selección masculina. Acuático y afrutado en la salida, con una canela que sólo aparece a media tarde. El que se regala cuando no se conoce el gusto de la persona."
+featured: false
+inStock: true
+order: 40
+photo: "/img/perfumes/hawas-for-him.webp"

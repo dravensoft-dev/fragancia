@@ -1,0 +1,20 @@
+slug: "khamrah"
+name: "Khamrah"
+brand: "Lattafa"
+line: "hombre"
+family: "Oriental gourmand"
+notes:
+  - "Canela"
+  - "Dátil"
+  - "Praliné"
+  - "Vainilla"
+  - "Benjuí"
+sizeMl: 100
+priceBob: 380
+concentration: "Eau de parfum"
+summary: "Dátil y canela sobre un fondo de vainilla tostada."
+description: "La casa lo vende más que ningún otro. Abre dulce y especiado, con el dátil por delante, y termina en una base de benjuí y vainilla que se queda en la ropa hasta el día siguiente. Para la noche fría de Cochabamba."
+featured: true
+inStock: true
+order: 10
+photo: "/img/perfumes/9pm.webp"

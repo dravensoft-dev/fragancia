@@ -1,0 +1,20 @@
+slug: "asad"
+name: "Asad"
+brand: "Lattafa"
+line: "hombre"
+family: "Amaderado especiado"
+notes:
+  - "Pimienta negra"
+  - "Café"
+  - "Piña"
+  - "Vainilla"
+  - "Cedro"
+sizeMl: 100
+priceBob: 320
+concentration: "Eau de parfum"
+summary: "Café y pimienta negra sobre cedro seco."
+description: "Seco, amargo y masculino sin esfuerzo. El café domina la primera hora y el cedro sostiene el resto. Rinde de sobra para oficina y para salida."
+featured: false
+inStock: true
+order: 30
+photo: "/img/perfumes/club-de-nuit-intense-man.webp"

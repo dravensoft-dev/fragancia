@@ -1,0 +1,20 @@
+slug: "yara"
+name: "Yara"
+brand: "Lattafa"
+line: "mujer"
+family: "Floral gourmand"
+notes:
+  - "Orquídea"
+  - "Heliotropo"
+  - "Vainilla"
+  - "Almizcle"
+  - "Sándalo"
+sizeMl: 100
+priceBob: 290
+concentration: "Eau de parfum"
+summary: "Orquídea y vainilla, dulce y reconocible."
+description: "El femenino más vendido de la casa y el que más gente pregunta por su nombre en la calle. Dulce sin empalagar, con un almizcle que lo sostiene toda la tarde."
+featured: true
+inStock: true
+order: 10
+photo: "/img/perfumes/club-de-nuit-woman.webp"

@@ -1,0 +1,20 @@
+slug: "blue-lady-2"
+name: "Blue Lady 2"
+brand: "Rasasi"
+line: "mujer"
+family: "Floral frutal"
+notes:
+  - "Bergamota"
+  - "Melocotón"
+  - "Jazmín"
+  - "Sándalo"
+  - "Almizcle"
+sizeMl: 75
+priceBob: 310
+concentration: "Eau de parfum"
+summary: "Melocotón y jazmín con base de sándalo."
+description: "Un clásico de Rasasi que lleva décadas vendiéndose. Frutal luminoso arriba, sándalo cremoso abajo. El femenino más pedido por las clientas mayores de la casa."
+featured: false
+inStock: true
+order: 60
+photo: "/img/perfumes/blue-lady-2.webp"

@@ -1,0 +1,19 @@
+slug: "ameerati"
+name: "Ameerati"
+brand: "Lattafa"
+line: "mujer"
+family: "Floral frutal"
+notes:
+  - "Frutas rojas"
+  - "Jazmín"
+  - "Vainilla"
+  - "Almizcle blanco"
+sizeMl: 100
+priceBob: 280
+concentration: "Eau de parfum"
+summary: "Frutas rojas y jazmín, para el día."
+description: "Ligero, fresco y sin pretensiones. El que se usa a diario y no cansa. Buen primer perfume árabe para quien viene de fragancias comerciales."
+featured: false
+inStock: true
+order: 40
+photo: "/img/perfumes/club-de-nuit-woman.webp"

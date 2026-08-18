@@ -1,0 +1,19 @@
+slug: "najdia"
+name: "Najdia"
+brand: "Lattafa"
+line: "mujer"
+family: "Floral almizclado"
+notes:
+  - "Durazno"
+  - "Rosa"
+  - "Almizcle blanco"
+  - "Ámbar"
+sizeMl: 100
+priceBob: 260
+concentration: "Eau de parfum"
+summary: "Durazno y rosa sobre almizcle blanco."
+description: "Suave y cercano, de los que se perciben a un brazo de distancia y no más. Pensado para oficina y para clima cálido, donde un ambarado pesaría."
+featured: false
+inStock: true
+order: 50
+photo: "/img/perfumes/blue-lady-2.webp"

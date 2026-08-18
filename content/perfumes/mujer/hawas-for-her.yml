@@ -1,0 +1,20 @@
+slug: "hawas-for-her"
+name: "Hawas For Her"
+brand: "Rasasi"
+line: "mujer"
+family: "Floral afrutado"
+notes:
+  - "Pera"
+  - "Grosella negra"
+  - "Jazmín"
+  - "Ámbar"
+  - "Almizcle"
+sizeMl: 100
+priceBob: 540
+concentration: "Eau de parfum"
+summary: "Pera y grosella sobre jazmín y ámbar."
+description: "La versión femenina del Hawas, y la más elegante de la línea. Afrutada en la salida, floral en el corazón y ambarada en el fondo. Va igual de bien a la oficina que a una boda."
+featured: true
+inStock: true
+order: 20
+photo: "/img/perfumes/blue-lady-2.webp"
