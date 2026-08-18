@@ -1,0 +1,19 @@
+.line-slogan {
+  margin: 0;
+  padding-block-start: var(--pad-surface);
+  border-block-start: var(--bw-separator) solid var(--edge-separator);
+  text-align: center;
+  font-family: var(--ff-heading);
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-heading);
+  letter-spacing: var(--track-heading);
+  line-height: var(--lh-heading);
+  color: var(--ink-heading);
+}
+
+.line-slogan em {
+  font-family: var(--ff-slogan);
+  font-size: var(--fs-h1);
+  font-style: normal;
+  color: var(--color-primary);
+}

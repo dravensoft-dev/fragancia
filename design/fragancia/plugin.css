@@ -1,0 +1,42 @@
+[data-arena-part="section.titles"] {
+  flex: 1;
+}
+
+[data-arena-part="section.title"] {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-items);
+}
+
+[data-arena-part="section.title"]::after {
+  content: "";
+  flex: 1;
+  height: var(--bw-separator);
+  background: var(--edge-separator);
+}
+
+[data-arena-part="hero.eyebrow"] {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-control);
+}
+
+[data-arena-part="hero.eyebrow"]::before {
+  content: "";
+  width: var(--sp-2);
+  height: var(--sp-2);
+  background: var(--ink-eyebrow);
+  transform: rotate(45deg);
+}
+
+[data-arena-part="hero.title"] {
+  font-size: clamp(var(--fs-h1), 11vw, var(--step-title-hero));
+}
+
+[data-arena-part="page-head.title"] {
+  font-size: clamp(var(--fs-h2), 9vw, var(--step-title-page));
+}
+
+[data-arena-part="section.title"] {
+  font-size: clamp(var(--fs-h3), 7vw, var(--step-title-section));
+}

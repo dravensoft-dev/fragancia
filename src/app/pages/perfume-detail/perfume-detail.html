@@ -1,0 +1,46 @@
+<app-structured-data [key]="'product-' + perfume().slug" [schema]="productSchema()" />
+
+<div class="arena-band arena-stack arena-stack--section" [class.arena-femme]="profile()?.rosegold">
+  <arena-breadcrumbs
+    ngSkipHydration
+    ariaLabel="Ruta dentro del catálogo"
+    [items]="crumbs()"
+    [origin]="origin"
+    (navigate)="goTo($event)"
+  />
+
+  <div class="detail arena-row arena-row--component arena-row--start">
+    <div class="detail__media">
+      <arena-figure>
+        @if (perfume().photo) {
+          <img media [src]="perfume().photo" [alt]="alt()" decoding="async" />
+        } @else {
+          <i fallback class="ph-light ph-drop" aria-hidden="true"></i>
+        }
+      </arena-figure>
+    </div>
+
+    <div class="detail__info arena-stack">
+      <p class="detail__brand">{{ perfume().brand }}</p>
+      <h1 class="detail__name">{{ perfume().name }}</h1>
+      <p class="detail__summary">{{ perfume().summary }}</p>
+
+      <ul class="detail__notes arena-row">
+        @for (note of perfume().notes; track note) {
+          <li>
+            <arena-tag>{{ note }}</arena-tag>
+          </li>
+        }
+      </ul>
+
+      <arena-key-value [rows]="rows()" [total]="total()" />
+
+      <p class="detail__description">{{ perfume().description }}</p>
+
+      <a [href]="whatsapp" rel="noopener" target="_blank" class="detail__cta">
+        <i class="ph-bold ph-whatsapp-logo" aria-hidden="true"></i>
+        <span>Consultar por {{ perfume().name }}</span>
+      </a>
+    </div>
+  </div>
+</div>

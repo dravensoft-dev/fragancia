@@ -1,0 +1,19 @@
+<arena-card [href]="path()" (click)="open()">
+  <arena-figure>
+    @if (perfume().photo) {
+      <img media [src]="perfume().photo" [alt]="alt()" loading="lazy" decoding="async" />
+    } @else {
+      <i fallback class="ph-light ph-drop" aria-hidden="true"></i>
+    }
+  </arena-figure>
+
+  <div class="perfume-card__body arena-stack arena-stack--group">
+    <p class="perfume-card__brand">{{ perfume().brand }}</p>
+    <h3 class="perfume-card__name">{{ perfume().name }}</h3>
+    <p class="perfume-card__family">{{ perfume().family }}</p>
+    <p class="perfume-card__price arena-row arena-row--baseline">
+      <span class="perfume-card__amount arena-num">Bs {{ perfume().priceBob }}</span>
+      <span class="perfume-card__size arena-num">{{ perfume().sizeMl }} ml</span>
+    </p>
+  </div>
+</arena-card>

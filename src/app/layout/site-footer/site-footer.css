@@ -1,0 +1,54 @@
+.footer-column {
+  color: var(--color-primary);
+}
+
+.footer-heading {
+  margin: 0;
+  font-family: var(--ff-label);
+  font-size: var(--step-eyebrow);
+  font-weight: var(--fw-control);
+  letter-spacing: var(--track-eyebrow);
+  text-transform: var(--tt-eyebrow);
+  color: var(--ink-eyebrow);
+}
+
+.footer-slogan {
+  margin: 0;
+  font-family: var(--ff-heading);
+  font-size: var(--step-title-surface);
+  line-height: var(--lh-heading);
+  color: color-mix(in oklab, var(--ink-body) var(--level-ink-body), transparent);
+}
+
+.footer-slogan em {
+  font-family: var(--ff-slogan);
+  font-size: var(--fs-h3);
+  font-style: normal;
+  color: var(--color-primary);
+}
+
+.footer-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.footer-link,
+.footer-line {
+  font-size: var(--fs-sm);
+  color: color-mix(in oklab, var(--ink-muted) var(--level-ink-muted), transparent);
+  text-decoration: none;
+}
+
+.footer-link {
+  transition: color var(--dur-hover) var(--ease-hover);
+}
+
+.footer-link:hover {
+  color: var(--color-primary);
+}
+
+.footer-link:focus-visible {
+  outline: var(--focus-width) solid var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}

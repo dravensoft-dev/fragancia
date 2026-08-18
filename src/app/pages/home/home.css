@@ -1,0 +1,164 @@
+.lockup {
+  align-items: center;
+  padding: var(--pad-surface);
+  border: var(--bw-surface) solid var(--edge-surface);
+  background: var(--fill-surface);
+  color: var(--color-primary);
+}
+
+.lockup__mark {
+  width: var(--logo-mark-xl);
+  max-width: 100%;
+}
+
+.lockup__word {
+  margin: 0;
+  font-family: var(--ff-heading);
+  font-size: clamp(var(--fs-h3), 9vw, var(--fs-h1));
+  font-weight: var(--fw-heading);
+  letter-spacing: var(--track-eyebrow);
+  text-indent: var(--track-eyebrow);
+  line-height: var(--lh-heading);
+}
+
+.lockup__rule {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-inline);
+  margin: 0;
+  font-family: var(--ff-label);
+  font-size: var(--step-eyebrow);
+  letter-spacing: var(--track-eyebrow);
+  text-indent: var(--track-eyebrow);
+  color: color-mix(in oklab, var(--ink-body) var(--level-ink-body), transparent);
+}
+
+.lockup__rule span {
+  display: block;
+  width: var(--sp-16);
+  max-width: 15%;
+  height: var(--bw-separator);
+  background: var(--color-secondary);
+}
+
+.lockup__slogan {
+  margin: 0;
+  font-family: var(--ff-slogan);
+  font-size: clamp(var(--fs-h2), 11vw, var(--fs-h1));
+  line-height: var(--lh-heading);
+  color: var(--color-primary);
+}
+
+.lines {
+  align-items: stretch;
+}
+
+.lines__door {
+  flex: 1 1 var(--grid-min);
+  align-items: center;
+  padding: var(--pad-surface);
+  text-align: center;
+  text-decoration: none;
+  border: var(--bw-surface) solid var(--edge-surface);
+  background: var(--fill-surface);
+  transition: border-color var(--dur-hover) var(--ease-hover);
+}
+
+.lines__door:hover {
+  border-color: var(--color-primary);
+}
+
+.lines__door:focus-visible {
+  outline: var(--focus-width) solid var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}
+
+.lines__mark {
+  width: var(--logo-mark-lg);
+  color: var(--color-primary);
+}
+
+.lines__descriptor {
+  margin: 0;
+  font-family: var(--ff-slogan);
+  font-size: var(--fs-h2);
+  line-height: var(--lh-heading);
+  color: var(--color-primary);
+}
+
+.lines__label {
+  margin: 0;
+  font-family: var(--ff-label);
+  font-size: var(--step-eyebrow);
+  letter-spacing: var(--track-eyebrow);
+  text-transform: var(--tt-eyebrow);
+  color: color-mix(in oklab, var(--ink-muted) var(--level-ink-muted), transparent);
+}
+
+.lines__lede {
+  max-width: var(--measure-prose);
+  margin: 0;
+  font-size: var(--fs-md);
+  line-height: var(--lh-prose);
+  color: color-mix(in oklab, var(--ink-body) var(--level-ink-body), transparent);
+}
+
+.lines__more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-control);
+  margin: 0;
+  font-family: var(--ff-label);
+  font-size: var(--step-eyebrow);
+  letter-spacing: var(--track-label);
+  text-transform: var(--tt-label);
+  color: var(--color-primary);
+}
+
+.prose p {
+  margin: 0;
+  font-size: var(--fs-lg);
+  line-height: var(--lh-prose);
+  color: color-mix(in oklab, var(--ink-body) var(--level-ink-body), transparent);
+}
+
+.contact__card {
+  align-items: flex-start;
+  margin: 0;
+  padding: var(--pad-surface);
+  text-decoration: none;
+  border: var(--bw-surface) solid var(--edge-surface);
+  background: var(--fill-surface);
+  transition: border-color var(--dur-hover) var(--ease-hover);
+}
+
+.contact__card:hover {
+  border-color: var(--color-primary);
+}
+
+.contact__card:focus-visible {
+  outline: var(--focus-width) solid var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}
+
+.contact__card--static:hover {
+  border-color: var(--edge-surface);
+}
+
+.contact__icon {
+  font-size: var(--icon-lg);
+  color: var(--color-primary);
+}
+
+.contact__label {
+  font-family: var(--ff-label);
+  font-size: var(--step-eyebrow);
+  letter-spacing: var(--track-eyebrow);
+  text-transform: var(--tt-eyebrow);
+  color: var(--ink-eyebrow);
+}
+
+.contact__value {
+  font-size: var(--fs-lg);
+  color: var(--ink-heading);
+}

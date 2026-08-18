@@ -1,0 +1,93 @@
+{
+  "stylePlugins": ["./design/fragancia"],
+  "gradientMark": false,
+  "stylesheet": {
+    "components": "auto"
+  },
+  "palettes": [
+    {
+      "name": "noche",
+      "default": true,
+      "polarity": "dark",
+      "colors": {
+        "base-100": "#080806",
+        "base-200": "#0d0b08",
+        "base-300": "#241e14",
+        "base-content": "#f4efe6",
+        "primary": "#d9b268",
+        "primary-content": "#12100a",
+        "secondary": "#7a5c24",
+        "secondary-content": "#f4efe6",
+        "neutral": "#2e2618",
+        "neutral-content": "#b3a48b",
+        "info": "#8fb3cc",
+        "info-content": "#080806",
+        "success": "#7fb08c",
+        "success-content": "#080806",
+        "warning": "#e0b957",
+        "warning-content": "#12100a",
+        "error": "#e07a70",
+        "error-content": "#ffffff",
+        "error-fill": "#b23a30",
+        "cat-1": "#3c7b0a",
+        "cat-2": "#3b63be",
+        "cat-3": "#0a924b",
+        "cat-4": "#6a59bc",
+        "cat-5": "#00a3c0",
+        "cat-6": "#884da9",
+        "cat-7": "#00a99a",
+        "cat-8": "#984697"
+      }
+    },
+    {
+      "name": "femme",
+      "polarity": "dark",
+      "colors": {
+        "base-100": "#0b0807",
+        "base-200": "#0d0908",
+        "base-300": "#33231f",
+        "base-content": "#f4efe6",
+        "primary": "#e3b8a6",
+        "primary-content": "#2a1714",
+        "secondary": "#85554d",
+        "secondary-content": "#f2e4de",
+        "neutral": "#3e2b26",
+        "neutral-content": "#c4a49c",
+        "info": "#8fb3cc",
+        "info-content": "#0b0807",
+        "success": "#7fb08c",
+        "success-content": "#0b0807",
+        "warning": "#e0b957",
+        "warning-content": "#2a1714",
+        "error": "#e07a70",
+        "error-content": "#ffffff",
+        "error-fill": "#b23a30",
+        "cat-1": "#3c7b0a",
+        "cat-2": "#3b63be",
+        "cat-3": "#0a924b",
+        "cat-4": "#6a59bc",
+        "cat-5": "#00a3c0",
+        "cat-6": "#884da9",
+        "cat-7": "#00a99a",
+        "cat-8": "#984697"
+      }
+    }
+  ],
+  "fonts": {
+    "display": {
+      "family": "Cormorant Garamond",
+      "src": "/fonts/cormorant-garamond-latin.woff2",
+      "weight": "300 700"
+    },
+    "body": {
+      "family": "Jost",
+      "src": "/fonts/jost-latin.woff2",
+      "weight": "200 600"
+    },
+    "mono": {
+      "family": "IBM Plex Mono",
+      "src": "/fonts/ibm-plex-mono-latin.woff2",
+      "weight": "400"
+    }
+  }
+}

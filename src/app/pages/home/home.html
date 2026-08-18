@@ -1,0 +1,127 @@
+<app-structured-data key="website" [schema]="websiteSchema" />
+<app-structured-data key="store" [schema]="storeSchema" />
+
+<div class="arena-band arena-stack arena-stack--section">
+  <arena-hero
+    eyebrow="Perfumería árabe seleccionada"
+    title="El lujo y la elegancia"
+    lede="Eau de parfum original de Lattafa, Armaf, Rasasi, Afnan y Al Haramain, elegido frasco a frasco en Cochabamba. Sin imitaciones y sin catálogos interminables: sólo lo que la casa vuelve a comprar."
+  >
+    <div actions class="arena-row">
+      <arena-button size="lg" icon="ph-bold ph-arrow-right" (click)="goTo('/perfumes/hombre')">
+        Perfumes para hombre
+      </arena-button>
+      <arena-button
+        variant="ghost"
+        size="lg"
+        icon="ph-bold ph-arrow-right"
+        (click)="goTo('/perfumes/mujer')"
+      >
+        Perfumes para mujer
+      </arena-button>
+    </div>
+
+    <div figure class="lockup arena-stack">
+      <app-brand-mark class="lockup__mark" />
+      <p class="lockup__word">FRAGANCIA</p>
+      <p class="lockup__rule"><span></span>PERFUMERÍA<span></span></p>
+      <p class="lockup__slogan">en cada gota.</p>
+    </div>
+  </arena-hero>
+
+  <arena-section
+    id="destacados"
+    eyebrow="Lo que más sale"
+    title="Destacados de la casa"
+    description="Los cuatro frascos que la perfumería repone cada mes."
+    rhythm="md"
+  >
+    <arena-grid>
+      @for (perfume of featured(); track perfume.slug) {
+        <app-perfume-card [perfume]="perfume" />
+      }
+    </arena-grid>
+  </arena-section>
+
+  <arena-section
+    eyebrow="Un metal por línea"
+    title="Las dos líneas"
+    description="Oro para Homme, oro rosa para Femme. La misma casa y la misma selección, dos estelas distintas."
+    rhythm="md"
+  >
+    <div class="lines arena-row arena-row--component">
+      @for (line of lines(); track line.line) {
+        <a
+          [routerLink]="line.path"
+          class="lines__door arena-stack arena-stack--group"
+          [class.arena-femme]="line.rosegold"
+          [attr.aria-label]="line.label"
+        >
+          <app-brand-mark class="lines__mark" />
+          <p class="lines__descriptor">{{ line.descriptor }}</p>
+          <p class="lines__label">{{ line.label }}</p>
+          <p class="lines__lede">{{ line.lede }}</p>
+          <p class="lines__more">
+            Ver la línea
+            <i class="ph-bold ph-arrow-right" aria-hidden="true"></i>
+          </p>
+        </a>
+      }
+    </div>
+  </arena-section>
+
+  <arena-section id="la-casa" eyebrow="Quiénes somos" title="La casa" rhythm="md">
+    <div class="prose arena-prose arena-stack">
+      <p>
+        Fragancia es una perfumería de Cochabamba dedicada a la perfumería árabe. Traemos eau de
+        parfum original de las casas del Golfo —Lattafa, Armaf, Rasasi, Afnan, Al Haramain— y las
+        vendemos por su nombre, con su concentración y su tamaño a la vista.
+      </p>
+      <p>
+        El catálogo es corto a propósito. Preferimos doce frascos que conocemos, que hemos usado y
+        que sabemos cómo se comportan en el clima del valle, antes que una lista de cien que nadie
+        puede recomendar. Si un perfume deja de convencernos, sale del catálogo.
+      </p>
+      <p>
+        Atendemos por WhatsApp y por Instagram, y entregamos en Cochabamba. Si buscas algo que no
+        está aquí, escríbenos: casi siempre podemos conseguirlo.
+      </p>
+    </div>
+  </arena-section>
+
+  <arena-section
+    id="contacto"
+    eyebrow="Dónde encontrarnos"
+    title="Contacto"
+    description="Escríbenos y te decimos qué hay en stock hoy."
+    rhythm="md"
+  >
+    <arena-grid>
+      <a
+        [href]="whatsapp"
+        rel="noopener"
+        target="_blank"
+        class="contact__card arena-stack arena-stack--group"
+      >
+        <i class="ph-bold ph-whatsapp-logo contact__icon" aria-hidden="true"></i>
+        <span class="contact__label">WhatsApp</span>
+        <span class="contact__value">{{ phone }}</span>
+      </a>
+      <a
+        [href]="instagramUrl"
+        rel="noopener"
+        target="_blank"
+        class="contact__card arena-stack arena-stack--group"
+      >
+        <i class="ph-bold ph-instagram-logo contact__icon" aria-hidden="true"></i>
+        <span class="contact__label">Instagram</span>
+        <span class="contact__value">&#64;{{ instagram }}</span>
+      </a>
+      <p class="contact__card contact__card--static arena-stack arena-stack--group">
+        <i class="ph-bold ph-map-pin contact__icon" aria-hidden="true"></i>
+        <span class="contact__label">Ubicación</span>
+        <span class="contact__value">{{ city }} · {{ country }}</span>
+      </p>
+    </arena-grid>
+  </arena-section>
+</div>

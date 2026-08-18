@@ -1,0 +1,9 @@
+dist
+.angular
+bun.lock
+src/arena.generated.css
+src/icons.generated.css
+src/plugin.generated.css
+public/sitemap.xml
+public/fonts
+Identidad visual de perfumería de lujo

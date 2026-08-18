@@ -1,0 +1,26 @@
+<arena-app-bar>
+  <a brand routerLink="/" class="brand-link" aria-label="Fragancia, inicio">
+    <arena-app-logo size="sm" [name]="siteName">
+      <app-brand-mark mark />
+    </arena-app-logo>
+  </a>
+
+  <nav nav aria-label="Secciones de la perfumería" class="arena-row">
+    <a routerLink="/perfumes/hombre" routerLinkActive="is-current" class="site-nav__link">Hombre</a>
+    <a routerLink="/perfumes/mujer" routerLinkActive="is-current" class="site-nav__link">Mujer</a>
+    <a routerLink="/" fragment="la-casa" class="site-nav__link">La casa</a>
+  </nav>
+
+  <div actions>
+    <a
+      [href]="whatsapp"
+      rel="noopener"
+      target="_blank"
+      class="site-actions__link"
+      aria-label="Escríbenos por WhatsApp"
+    >
+      <i class="ph-bold ph-whatsapp-logo" aria-hidden="true"></i>
+      <span class="site-actions__label">Escríbenos</span>
+    </a>
+  </div>
+</arena-app-bar>

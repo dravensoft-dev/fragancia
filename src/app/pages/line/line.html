@@ -1,0 +1,30 @@
+<app-structured-data [key]="'line-' + line()" [schema]="listSchema()" />
+
+<div class="arena-band arena-stack arena-stack--section" [class.arena-femme]="profile().rosegold">
+  <arena-page-head headingLevel="h1" [title]="profile().label" [subtitle]="profile().lede" />
+
+  <arena-section
+    [eyebrow]="perfumes().length + ' frascos en catálogo'"
+    [title]="'Línea ' + profile().descriptor"
+    description="Eau de parfum original, con su marca, su familia olfativa y su precio a la vista."
+    rhythm="md"
+  >
+    @if (perfumes().length) {
+      <arena-grid>
+        @for (perfume of perfumes(); track perfume.slug) {
+          <app-perfume-card [perfume]="perfume" />
+        }
+      </arena-grid>
+    } @else {
+      <arena-empty-state
+        icon="ph-light ph-drop"
+        title="Todavía no hay frascos en esta línea"
+        message="Estamos reponiendo. Escríbenos por WhatsApp y te avisamos en cuanto llegue."
+      />
+    }
+  </arena-section>
+
+  <p class="line-slogan">
+    {{ profile().sloganLead }} <em>{{ profile().slogan }}</em>
+  </p>
+</div>

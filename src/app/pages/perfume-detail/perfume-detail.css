@@ -1,0 +1,81 @@
+.detail__media {
+  display: grid;
+  flex: 1 1 var(--grid-min);
+  border: var(--bw-surface) solid var(--edge-surface);
+  background: var(--fill-surface);
+  padding: var(--pad-surface);
+}
+
+.detail__info {
+  flex: 1 1 var(--grid-min);
+}
+
+.detail__brand {
+  margin: 0;
+  font-family: var(--ff-eyebrow);
+  font-size: var(--step-eyebrow);
+  font-weight: var(--fw-eyebrow);
+  letter-spacing: var(--track-eyebrow);
+  text-transform: var(--tt-eyebrow);
+  color: var(--ink-eyebrow);
+}
+
+.detail__name {
+  margin: 0;
+  font-family: var(--ff-heading);
+  font-size: clamp(var(--fs-h2), 9vw, var(--step-title-page));
+  font-weight: var(--fw-heading);
+  letter-spacing: var(--track-heading);
+  line-height: var(--lh-heading);
+  color: var(--ink-heading);
+}
+
+.detail__summary {
+  max-width: var(--measure-prose);
+  margin: 0;
+  font-size: var(--fs-lg);
+  line-height: var(--lh-prose);
+  color: color-mix(in oklab, var(--ink-body) var(--level-ink-body), transparent);
+}
+
+.detail__notes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.detail__description {
+  max-width: var(--measure-prose);
+  margin: 0;
+  font-size: var(--fs-md);
+  line-height: var(--lh-prose);
+  color: color-mix(in oklab, var(--ink-muted) var(--level-ink-muted), transparent);
+}
+
+.detail__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-control);
+  align-self: flex-start;
+  font-family: var(--ff-label);
+  font-size: var(--step-eyebrow);
+  font-weight: var(--fw-control);
+  letter-spacing: var(--track-label);
+  text-transform: var(--tt-label);
+  text-decoration: none;
+  color: var(--color-primary-content);
+  background: var(--color-primary);
+  border: var(--bw-control) solid var(--color-primary);
+  padding: var(--pad-control-y) var(--pad-control-x);
+  transition: background-color var(--dur-hover) var(--ease-hover);
+}
+
+.detail__cta:hover {
+  background: color-mix(in oklab, var(--color-primary) 86%, var(--color-base-100));
+}
+
+.detail__cta:focus-visible {
+  outline: var(--focus-width) solid var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}

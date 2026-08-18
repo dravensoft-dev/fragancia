@@ -1,0 +1,32 @@
+@import "./icons.generated.css";
+@import "./arena.generated.css";
+@import "./plugin.generated.css";
+
+@font-face {
+  font-family: "Sacramento";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/sacramento-latin.woff2") format("woff2");
+}
+
+:root {
+  --ff-slogan: "Sacramento", cursive;
+}
+
+html {
+  background: var(--fill-page);
+}
+
+body {
+  margin: 0;
+  background: var(--fill-page);
+  color: var(--ink-body);
+  font-family: var(--font-body);
+  font-size: var(--fs-md);
+  line-height: var(--lh-prose);
+}
+
+router-outlet {
+  display: none;
+}

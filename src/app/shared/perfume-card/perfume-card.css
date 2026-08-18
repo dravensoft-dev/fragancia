@@ -1,0 +1,48 @@
+.perfume-card__body {
+  text-align: center;
+}
+
+.perfume-card__brand {
+  margin: 0;
+  font-family: var(--ff-eyebrow);
+  font-size: var(--step-eyebrow);
+  font-weight: var(--fw-eyebrow);
+  letter-spacing: var(--track-eyebrow);
+  text-transform: var(--tt-eyebrow);
+  color: var(--ink-eyebrow);
+}
+
+.perfume-card__name {
+  margin: 0;
+  min-height: calc(2 * var(--step-title-surface) * var(--lh-heading));
+  font-family: var(--ff-heading);
+  font-size: var(--step-title-surface);
+  font-weight: var(--fw-heading);
+  letter-spacing: var(--track-heading);
+  line-height: var(--lh-heading);
+  color: var(--ink-heading);
+}
+
+.perfume-card__family {
+  margin: 0;
+  margin-block-end: auto;
+  font-size: var(--fs-sm);
+  color: color-mix(in oklab, var(--ink-muted) var(--level-ink-muted), transparent);
+}
+
+.perfume-card__price {
+  justify-content: center;
+  margin: 0;
+  padding-block-start: var(--gap-control);
+  border-block-start: var(--bw-separator) solid var(--edge-separator);
+}
+
+.perfume-card__amount {
+  font-size: var(--fs-md);
+  color: var(--color-primary);
+}
+
+.perfume-card__size {
+  font-size: var(--fs-xs);
+  color: color-mix(in oklab, var(--ink-muted) var(--level-ink-muted), transparent);
+}

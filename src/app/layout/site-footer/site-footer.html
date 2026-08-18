@@ -1,0 +1,46 @@
+<arena-site-footer
+  [note]="
+    '© ' +
+    year +
+    ' ' +
+    siteName +
+    '. Perfumería árabe seleccionada · ' +
+    city +
+    ' · ' +
+    country +
+    '.'
+  "
+>
+  <div class="footer-column arena-stack">
+    <arena-app-logo size="md" [name]="siteName">
+      <app-brand-mark mark />
+    </arena-app-logo>
+    <p class="footer-slogan">El lujo y la elegancia <em>en cada gota.</em></p>
+  </div>
+
+  <div class="footer-column arena-stack">
+    <h2 class="footer-heading">Catálogo</h2>
+    <ul class="footer-list arena-stack arena-stack--group">
+      <li><a routerLink="/perfumes/hombre" class="footer-link">Perfumes para hombre</a></li>
+      <li><a routerLink="/perfumes/mujer" class="footer-link">Perfumes para mujer</a></li>
+      <li><a routerLink="/" fragment="destacados" class="footer-link">Destacados de la casa</a></li>
+    </ul>
+  </div>
+
+  <div class="footer-column arena-stack">
+    <h2 class="footer-heading">Contacto</h2>
+    <ul class="footer-list arena-stack arena-stack--group">
+      <li>
+        <a [href]="whatsapp" rel="noopener" target="_blank" class="footer-link">
+          WhatsApp {{ phone }}
+        </a>
+      </li>
+      <li>
+        <a [href]="instagramUrl" rel="noopener" target="_blank" class="footer-link">
+          &#64;{{ instagram }}
+        </a>
+      </li>
+      <li class="footer-line">{{ city }} · {{ country }}</li>
+    </ul>
+  </div>
+</arena-site-footer>
