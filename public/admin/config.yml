@@ -1,0 +1,257 @@
+backend:
+  name: github
+  repo: dravensoft-dev/fragancia
+  branch: main
+  base_url: https://auth.fragancia.com.bo
+
+site_url: https://fragancia.com.bo
+media_folder: public/img/perfumes
+public_folder: /img/perfumes
+
+media_libraries:
+  default:
+    config:
+      max_file_size: 5000000
+      slugify_filename: true
+      transformations:
+        jpeg:
+          format: webp
+          quality: 82
+          width: 1400
+        png:
+          format: webp
+          quality: 82
+          width: 1400
+        webp:
+          format: webp
+          quality: 82
+          width: 1400
+
+collections:
+  - name: perfumes_hombre
+    label: Perfumes para hombre
+    label_singular: Perfume para hombre
+    folder: content/perfumes/hombre
+    extension: yml
+    format: yaml
+    create: true
+    delete: false
+    slug: '{{fields.slug}}'
+    summary: '{{name}} · {{brand}}'
+    fields:
+      - name: slug
+        label: Identificador en la URL
+        widget: string
+        required: true
+        hint: Sólo minúsculas, números y guiones. Es la dirección de la ficha y no debería cambiar.
+        pattern:
+          - '^[a-z0-9]+(-[a-z0-9]+)*$'
+          - Sólo minúsculas, números y guiones, sin espacios ni tildes
+      - name: name
+        label: Nombre
+        widget: string
+        required: true
+        pattern:
+          - '^.{1,60}$'
+          - Entre 1 y 60 caracteres
+      - name: brand
+        label: Marca
+        widget: string
+        required: true
+      - name: family
+        label: Familia olfativa
+        widget: string
+        required: true
+        hint: Por ejemplo, Oriental gourmand o Amaderado especiado.
+      - name: notes
+        label: Notas
+        widget: list
+        required: true
+        min: 1
+        max: 8
+        field:
+          name: note
+          label: Nota
+          widget: string
+          required: true
+      - name: sizeMl
+        label: Contenido en ml
+        widget: number
+        value_type: int
+        min: 1
+        max: 1000
+        required: true
+      - name: priceBob
+        label: Precio en bolivianos
+        widget: number
+        value_type: int
+        min: 1
+        max: 100000
+        required: true
+        hint: Sólo el número. El sitio escribe el Bs.
+      - name: concentration
+        label: Concentración
+        widget: select
+        required: true
+        default: Eau de parfum
+        options:
+          - Eau de parfum
+          - Eau de toilette
+      - name: summary
+        label: Resumen
+        widget: string
+        required: true
+        hint: Una frase corta, entre 30 y 110 caracteres. Es lo que se ve en Google.
+        pattern:
+          - '^.{30,110}$'
+          - Entre 30 y 110 caracteres
+      - name: description
+        label: Descripción
+        widget: text
+        required: true
+        hint: Al menos 80 caracteres.
+        pattern:
+          - '[\s\S]{80,}'
+          - Al menos 80 caracteres
+      - name: featured
+        label: Destacado en la portada
+        widget: boolean
+        default: false
+        hint: Entre dos y ocho perfumes destacados, al menos uno por línea.
+      - name: inStock
+        label: Disponible
+        widget: boolean
+        default: true
+        hint: Desactívalo cuando se agote. La ficha sigue publicada y se marca como agotada.
+      - name: order
+        label: Orden
+        widget: number
+        value_type: int
+        min: 0
+        max: 999
+        default: 100
+        required: true
+        hint: Déjalo en 100. Un número menor lo adelanta dentro de su línea.
+      - name: photo
+        label: Foto
+        widget: image
+        required: false
+        hint: Se convierte a webp automáticamente.
+      - name: line
+        label: Línea
+        widget: hidden
+        default: hombre
+
+  - name: perfumes_mujer
+    label: Perfumes para mujer
+    label_singular: Perfume para mujer
+    folder: content/perfumes/mujer
+    extension: yml
+    format: yaml
+    create: true
+    delete: false
+    slug: '{{fields.slug}}'
+    summary: '{{name}} · {{brand}}'
+    fields:
+      - name: slug
+        label: Identificador en la URL
+        widget: string
+        required: true
+        hint: Sólo minúsculas, números y guiones. Es la dirección de la ficha y no debería cambiar.
+        pattern:
+          - '^[a-z0-9]+(-[a-z0-9]+)*$'
+          - Sólo minúsculas, números y guiones, sin espacios ni tildes
+      - name: name
+        label: Nombre
+        widget: string
+        required: true
+        pattern:
+          - '^.{1,60}$'
+          - Entre 1 y 60 caracteres
+      - name: brand
+        label: Marca
+        widget: string
+        required: true
+      - name: family
+        label: Familia olfativa
+        widget: string
+        required: true
+        hint: Por ejemplo, Floral gourmand o Chipre floral.
+      - name: notes
+        label: Notas
+        widget: list
+        required: true
+        min: 1
+        max: 8
+        field:
+          name: note
+          label: Nota
+          widget: string
+          required: true
+      - name: sizeMl
+        label: Contenido en ml
+        widget: number
+        value_type: int
+        min: 1
+        max: 1000
+        required: true
+      - name: priceBob
+        label: Precio en bolivianos
+        widget: number
+        value_type: int
+        min: 1
+        max: 100000
+        required: true
+        hint: Sólo el número. El sitio escribe el Bs.
+      - name: concentration
+        label: Concentración
+        widget: select
+        required: true
+        default: Eau de parfum
+        options:
+          - Eau de parfum
+          - Eau de toilette
+      - name: summary
+        label: Resumen
+        widget: string
+        required: true
+        hint: Una frase corta, entre 30 y 110 caracteres. Es lo que se ve en Google.
+        pattern:
+          - '^.{30,110}$'
+          - Entre 30 y 110 caracteres
+      - name: description
+        label: Descripción
+        widget: text
+        required: true
+        hint: Al menos 80 caracteres.
+        pattern:
+          - '[\s\S]{80,}'
+          - Al menos 80 caracteres
+      - name: featured
+        label: Destacado en la portada
+        widget: boolean
+        default: false
+        hint: Entre dos y ocho perfumes destacados, al menos uno por línea.
+      - name: inStock
+        label: Disponible
+        widget: boolean
+        default: true
+        hint: Desactívalo cuando se agote. La ficha sigue publicada y se marca como agotada.
+      - name: order
+        label: Orden
+        widget: number
+        value_type: int
+        min: 0
+        max: 999
+        default: 100
+        required: true
+        hint: Déjalo en 100. Un número menor lo adelanta dentro de su línea.
+      - name: photo
+        label: Foto
+        widget: image
+        required: false
+        hint: Se convierte a webp automáticamente.
+      - name: line
+        label: Línea
+        widget: hidden
+        default: mujer

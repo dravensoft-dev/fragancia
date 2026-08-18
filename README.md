@@ -180,6 +180,26 @@ prerenderizado y no un dato que aparece tras la hidratación, que ningún crawle
 agotado se marca _Agotado_ y sigue listado, prerenderizado y en el sitemap: una ficha que dice
 agotado es mejor que un 404 en una URL ya indexada.
 
+## El panel
+
+`/admin` es Sveltia CMS, vendorizado en `public/admin/` y servido desde nuestro propio dominio: no
+hay CDN en tiempo de ejecución. `angular.json` ya copia `public/**` salvo los `*.md`, así que llega
+al build sin configurar nada, y `robots.txt` lo prohíbe.
+
+Son **dos colecciones, una por línea**. `line` no es un campo del formulario: es un valor oculto con
+el valor por defecto de su colección, así que se deriva del directorio donde se guarda y el dueño no
+puede equivocarlo. El nombre del archivo sale del propio slug, así que tampoco pueden discrepar.
+
+El formulario repite los límites del validador —obligatorios, el patrón del slug, los enteros con
+mínimo y máximo, entre una y ocho notas, la concentración como lista cerrada— para que lo que el
+build rechazaría tarde sea imposible temprano. Las fotos se convierten a WebP **en el navegador del
+dueño** antes de subirse, con tamaño y calidad limitados, así que un JPEG de 5 MB no llega nunca al
+repositorio.
+
+No hay entorno de pruebas: el panel escribe directo a `main` y `main` es lo que se despliega. Para
+un solo usuario una rama intermedia es ceremonia. El seguro es que cada guardado es un commit suyo,
+así que **deshacer un desastre es revertir un commit**.
+
 ## SEO
 
 - Cada ruta sale del build como HTML completo, no como cáscara que hidrata.
