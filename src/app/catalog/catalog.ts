@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LINES, PERFUMES } from './perfumes.data';
+import { LINES, PERFUMES } from './perfumes.generated';
 import { LineProfile, Perfume, PerfumeLine } from './perfume.model';
 
 @Injectable({ providedIn: 'root' })

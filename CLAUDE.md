@@ -108,8 +108,9 @@ bun run build --base-href=/fragancia/
 bun run scripts/pages-preview.ts /fragancia/
 ```
 
-`prestart`, `prebuild` and `pretest` all run `prepare:assets`, which regenerates:
+`prestart`, `prebuild`, `pretest` and `prelint` all run `prepare:assets`, which regenerates:
 
+- `src/app/catalog/perfumes.generated.ts`, from `scripts/generate-catalog.ts` reading `content/`;
 - `public/sitemap.xml`, from `scripts/generate-sitemap.ts`;
 - `src/arena.generated.css`, `src/icons.generated.css` and `src/plugin.generated.css`, from
   `arena-to-prod` reading `arena.config.json`, `src/` and `design/`.
@@ -121,11 +122,13 @@ bun run scripts/pages-preview.ts /fragancia/
 - `src/arena.generated.css`
 - `src/icons.generated.css`
 - `src/plugin.generated.css`
+- `src/app/catalog/perfumes.generated.ts`
 - `public/sitemap.xml`
 
-All four are in `.gitignore`, `.prettierignore` and the ESLint `ignores` list. To change what they
-contain, change their source — `arena.config.json`, `design/fragancia/`, or the catalogue — and run
-`bun run prepare:assets`.
+All five are in `.gitignore`, `.prettierignore` and the ESLint `ignores` list. To change what they
+contain, change their source — `arena.config.json`, `design/fragancia/`, or `content/` — and run
+`bun run prepare:assets`. A fresh clone does not compile until the first generation, exactly as it
+has no Arena sheets until then; the four lifecycle hooks cover it.
 
 ## GitHub Pages is the maquette, not the site
 

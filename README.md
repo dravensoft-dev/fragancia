@@ -158,6 +158,28 @@ repetir.
 | `/perfumes/mujer`                 | Línea Femme, en oro rosa                                     |
 | `/perfumes/{hombre,mujer}/<slug>` | Ficha por perfume                                            |
 
+## El catálogo
+
+La fuente es `content/`: un archivo YAML por registro, `content/lines/<línea>.yml` para la copia de
+cada línea y `content/perfumes/<línea>/<slug>.yml` para cada ficha. Un archivo por ficha, para que
+cada guardado toque uno solo y el diff se lea; partido por línea, porque el slug es único **dentro**
+de su línea y no en todo el catálogo, así que un directorio plano forzaría una unicidad que el
+modelo no pide.
+
+`scripts/generate-catalog.ts` lo valida y emite `src/app/catalog/perfumes.generated.ts`, que es un
+producto de build: no se edita y no se commitea. Corre el primero en `prepare:assets`, antes que el
+sitemap, que lee lo que él escribe.
+
+Las reglas viven aparte, en `src/app/catalog/catalog.schema.ts`, como funciones puras que Vitest
+prueba una por una. El generador sólo hace la entrada y salida. **Un archivo inválido rompe
+`bun run build` a propósito**: el despliegue no reemplaza un contenedor que compiló bien, así que el
+sitio sigue sirviendo la última versión buena mientras se arregla.
+
+`inStock` es un booleano y no una cantidad. Por eso `offers.availability` es un hecho en el HTML
+prerenderizado y no un dato que aparece tras la hidratación, que ningún crawler ve. Un perfume
+agotado se marca _Agotado_ y sigue listado, prerenderizado y en el sitemap: una ficha que dice
+agotado es mejor que un 404 en una URL ya indexada.
+
 ## SEO
 
 - Cada ruta sale del build como HTML completo, no como cáscara que hidrata.

@@ -1,6 +1,6 @@
 import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { LINES, PERFUMES } from '../src/app/catalog/perfumes.data';
+import { LINES, PERFUMES } from '../src/app/catalog/perfumes.generated';
 import { SITE_ORIGIN } from '../src/app/seo/site';
 
 interface SitemapEntry {

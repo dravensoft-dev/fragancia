@@ -1,16 +1,29 @@
 # scripts — build-lifecycle scripts
 
-Three Bun scripts. Two run from `package.json` hooks; the third runs only from the Pages
+Four Bun scripts. Three run from `package.json` hooks; the fourth runs only from the Pages
 workflow. None is invoked by hand in normal work.
+
+## generate-catalog.ts
+
+- **Emits** `src/app/catalog/perfumes.generated.ts`: `LINES` and `PERFUMES`, typed, validated and in
+  presentation order, from the YAML under `content/`.
+- **Runs first in `prepare:assets`**, so before `start`, `build`, `test` and `lint`, and ahead of
+  `generate-sitemap.ts`, which imports what it writes.
+- **Validates through `src/app/catalog/catalog.schema.ts`**, which is pure and is tested by
+  `catalog.schema.spec.ts` rule by rule. The script owns the I/O and nothing else: it reads the
+  files, injects `photoExists`, formats the errors and writes the output.
+- **Accumulates every error, groups them by file, writes nothing at all when anything fails, and
+  exits 1.** A bad content file breaks the build before Angular starts, so the deploy never replaces
+  a working container and the site keeps serving the last good version.
 
 ## generate-sitemap.ts
 
 - **Emits** `public/sitemap.xml`: the landing, both line pages, and one entry per perfume, with
   `lastmod` set to the day of the run.
 - **Runs** in `prepare:assets`, so before `start`, `build` and `test`, ahead of `arena-to-prod`.
-- **Reads** `LINES` and `PERFUMES` from `src/app/catalog/perfumes.data.ts` and `SITE_ORIGIN` from
-  `src/app/seo/site.ts` — the same constants the app renders from, imported directly. A perfume in
-  the data is a URL in the sitemap; there is no second list to keep in step.
+- **Reads** `LINES` and `PERFUMES` from `src/app/catalog/perfumes.generated.ts` and `SITE_ORIGIN`
+  from `src/app/seo/site.ts` — the same constants the app renders from, imported directly. A perfume
+  in `content/` is a URL in the sitemap; there is no second list to keep in step.
 - `public/robots.txt` points at the sitemap with a hardcoded origin and is **not** generated. Edit
   it when `SITE_ORIGIN` changes.
 
@@ -45,10 +58,11 @@ workflow. None is invoked by hand in normal work.
 
 ## Rules
 
-- **No script writes a source file.** `public/sitemap.xml` is an asset the build copies into
-  `dist`, and it is in `.gitignore` and `.prettierignore` like the rest of the build products;
-  `404.html` and everything `pages-preview.ts` rewrites are written straight into the build
-  output. Nothing here may edit anything under `src/`.
-- They are plain Bun TypeScript, run as `bun run scripts/<name>.ts`, and use only `node:fs` /
-  `node:path`. No Angular, no build tooling, no dependencies.
+- **A script writes a build product, never a source file.** `src/app/catalog/perfumes.generated.ts`
+  is one, exactly as `src/*.generated.css` is one for `arena-to-prod`: it is in `.gitignore`, in
+  `.prettierignore` and in the ESLint `ignores`, and it is rebuilt from `content/` on every
+  lifecycle hook. `public/sitemap.xml` is another; `404.html` and everything `pages-preview.ts`
+  rewrites are written straight into the build output. Nothing here may edit a file a person wrote.
+- They are plain Bun TypeScript, run as `bun run scripts/<name>.ts`, and use `node:fs` / `node:path`
+  plus `Bun.YAML`, which is native in Bun 1.3.14. No Angular, no build tooling, no dependencies.
 - Same code rules as the rest of the tree: English, and no comments.

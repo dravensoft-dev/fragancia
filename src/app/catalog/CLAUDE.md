@@ -1,7 +1,8 @@
 # src/app/catalog — the data
 
-Three files: the shapes (`perfume.model.ts`), the data (`perfumes.data.ts`), and the read-only
-accessor (`catalog.ts`).
+Five files: the shapes (`perfume.model.ts`), the rules (`catalog.schema.ts`), the composed meta
+description (`perfume-meta.ts`), the read-only accessor (`catalog.ts`), and the build product the
+accessor reads (`perfumes.generated.ts`, never edited and never committed).
 
 ## Shape
 
@@ -16,28 +17,42 @@ accessor (`catalog.ts`).
   `slogan`, `metaDescription`, and `rosegold`. **`rosegold` is what puts `.arena-femme` on the
   page** — it is a data flag, not a check against `line === 'mujer'`.
 
-## The data is a constant, not a fetch
+## The source is `content/`, and the catalogue is a build product
 
-- `PERFUMES` and `LINES` are typed module constants. They are read at prerender time and baked into
-  the HTML. There is no HTTP call, no store, no loading state, and none may be added: the site has
-  no server at runtime.
-- `scripts/generate-sitemap.ts` imports these same constants directly. A perfume that is in the
-  data is in the sitemap.
+- `PERFUMES` and `LINES` live in `perfumes.generated.ts`, which `scripts/generate-catalog.ts` writes
+  from the YAML under `content/perfumes/<line>/` and `content/lines/`. **Edit the YAML, never the
+  generated file**, and run `bun run prepare:assets`.
+- They are still typed module constants, read at prerender time and baked into the HTML. There is no
+  HTTP call, no store, no loading state, and none may be added: the site has no server at runtime.
+- `catalog.schema.ts` states every rule as a pure function and is what `catalog.schema.spec.ts`
+  tests. It is imported by the generator and by no component, so it never enters the bundle.
+- `perfume-meta.ts` composes the detail page's meta description, and both the page and the validator
+  call it. The limit is measured on that composed string, not on `summary` alone.
+- `scripts/generate-sitemap.ts` imports the same generated constants. A perfume in `content/` is a
+  route, an entry in the sitemap and a card in the grid.
 - `Catalog` is `providedIn: 'root'` and returns `readonly` slices. Keep it that way — it is the
   single read path and the only thing `catalog.spec.ts` tests.
 
 ## Adding a perfume
 
-1. Append an entry to `PERFUMES` in `perfumes.data.ts`. Every field is required except `photo`.
-2. `slug` must be unique **within its line** (the spec asserts this) and is the URL segment, so
-   keep it lowercase, hyphenated, ASCII.
-3. `featured: true` puts it on the landing grid. Keep that list short.
-4. `bun run build` — the route is prerendered from `getPrerenderParams`, and the sitemap picks it
-   up, both from this same constant. Nothing else to register.
+1. The owner does it in `/admin`. By hand it is a new file at
+   `content/perfumes/<line>/<slug>.yml`, with every field except `photo`.
+2. `slug` must match the file name, and `line` must match the directory. Both are rules, not
+   conventions, and the generator refuses the build over either.
+3. `order` decides where it sits inside its line; leave it at 100 and it lands after everything that
+   exists. `featured: true` puts it on the landing grid, and between two and eight perfumes may
+   carry it, at least one per line.
+4. `inStock: false` marks it _Agotado_ on the card and the detail page and turns the offer's
+   `availability` into `OutOfStock`. **It stays listed, prerendered and in the sitemap**: a page that
+   says "agotado" beats a 404 on a URL Google already knows.
+5. `bun run build` — the route is prerendered from `getPrerenderParams` and the sitemap picks it up,
+   both from the generated catalogue. Nothing else to register.
 
 ## photo is optional on purpose
 
-- `photo` is a path under `/img/perfumes/`, e.g. `/img/perfumes/khamrah.webp`.
+- `photo` is a path under `/img/perfumes/`, e.g. `/img/perfumes/khamrah.webp`. The shape is a rule —
+  `^/img/perfumes/[a-z0-9-]+\.(webp|jpg|png)$` — **and the file must exist**. The CMS always uploads
+  `.webp`; the other two are for shots added by hand.
 - **Leave it out and `ArenaFigure` draws its `[fallback]` slot** — the brand's drop marker — instead
   of a broken image; see `public/img/perfumes/README.md`.
 - Every perfume currently carries a `photo`, but only five bottles were photographed

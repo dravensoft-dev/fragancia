@@ -1,5 +1,5 @@
 import { RenderMode, ServerRoute } from '@angular/ssr';
-import { PERFUMES } from './catalog/perfumes.data';
+import { PERFUMES } from './catalog/perfumes.generated';
 
 function slugsOf(line: string): Promise<Record<string, string>[]> {
   return Promise.resolve(

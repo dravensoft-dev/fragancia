@@ -2463,17 +2463,51 @@ asserting over the generated catalogue.
 
 - [ ] **Step 4: Rebuild and diff the whole artefact**
 
+A raw `diff -r` over the two artefacts is **not** the gate, and it is worth knowing why before
+running anything: two consecutive builds of an unchanged tree already differ. The prerender workers
+run in parallel and hand out the `ng-state` hydration ids in completion order, so nine pages come
+out with different id numbering on every run. The bundle names differ too, and legitimately — the
+source module changed its name and its text, so its content hash changed.
+
+What must not have changed is **what a visitor and a crawler see**: the same set of routes, and the
+same markup on each, once those two known-variable things are normalised. Write the comparison to a
+file and run it, rather than fighting nested heredocs:
+
 ```bash
 bun run build
-diff -r /tmp/fragancia-before dist/fragancia/browser && echo "IDENTICAL"
 diff /tmp/sitemap-before.xml public/sitemap.xml && echo "SITEMAP IDENTICAL"
 ```
 
-Expected: `IDENTICAL` and `SITEMAP IDENTICAL`, with no lines before them. Every prerendered page,
-every hashed bundle name and every sitemap entry is the same, which is the end-to-end statement that
-the migration changed nothing a visitor or a crawler can see. **If `diff` prints anything, stop and
-read it before going on** — the only tolerable difference is a `lastmod` date, and only if the two
-builds straddled midnight.
+```python
+import os, re, hashlib
+
+def normalise(text):
+    text = re.sub(r'<script id="ng-state".*?</script>', '', text, flags=re.S)
+    return re.sub(r'(main|chunk)-[A-Za-z0-9_-]{8}\.js', r'\1-*.js', text)
+
+def collect(root):
+    out = {}
+    for dirpath, _, files in os.walk(root):
+        for name in files:
+            if name.endswith('.html'):
+                path = os.path.join(dirpath, name)
+                page = normalise(open(path, encoding='utf8').read())
+                out[os.path.relpath(path, root)] = hashlib.sha256(page.encode()).hexdigest()
+    return out
+
+before = collect('/tmp/fragancia-before')
+after = collect('dist/fragancia/browser')
+
+print('pages before:', len(before), ' after:', len(after))
+print('same set of routes:', sorted(before) == sorted(after))
+print('pages whose visible HTML differs:',
+      [k for k in sorted(before) if before[k] != after.get(k)] or 'none')
+```
+
+Expected: `SITEMAP IDENTICAL`, eighteen pages on both sides, `same set of routes: True`, and
+`pages whose visible HTML differs: none`. **If any page differs, stop and read it before going on.**
+Together with the equality test from Task 8, that is the end-to-end statement that the migration
+changed nothing anybody can see.
 
 - [ ] **Step 5: Delete the old source and its equality test**
 

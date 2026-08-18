@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { arenaRouteMeta } from '@dravensoft/arena-angular/metadata';
-import { LINES } from './catalog/perfumes.data';
+import { LINES } from './catalog/perfumes.generated';
 import { SITE_DESCRIPTION, SITE_NAME } from './seo/site';
 
 const [men, women] = LINES;
