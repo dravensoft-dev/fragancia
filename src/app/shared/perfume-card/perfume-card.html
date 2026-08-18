@@ -11,6 +11,13 @@
     <p class="perfume-card__brand">{{ perfume().brand }}</p>
     <h3 class="perfume-card__name">{{ perfume().name }}</h3>
     <p class="perfume-card__family">{{ perfume().family }}</p>
+
+    @if (!perfume().inStock) {
+      <p class="perfume-card__stock">
+        <arena-badge tone="neutral">Agotado</arena-badge>
+      </p>
+    }
+
     <p class="perfume-card__price arena-row arena-row--baseline">
       <span class="perfume-card__amount arena-num">Bs {{ perfume().priceBob }}</span>
       <span class="perfume-card__size arena-num">{{ perfume().sizeMl }} ml</span>

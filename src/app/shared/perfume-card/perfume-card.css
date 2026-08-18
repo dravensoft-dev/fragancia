@@ -30,6 +30,10 @@
   color: color-mix(in oklab, var(--ink-muted) var(--level-ink-muted), transparent);
 }
 
+.perfume-card__stock {
+  margin: 0;
+}
+
 .perfume-card__price {
   justify-content: center;
   margin: 0;

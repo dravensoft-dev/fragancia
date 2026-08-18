@@ -1,14 +1,20 @@
 import { Location } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
-import { ArenaCard, ArenaFallback, ArenaFigure, ArenaMedia } from '@dravensoft/arena-angular';
+import {
+  ArenaBadge,
+  ArenaCard,
+  ArenaFallback,
+  ArenaFigure,
+  ArenaMedia,
+} from '@dravensoft/arena-angular';
 import { Perfume } from '../../catalog/perfume.model';
 
 @Component({
   selector: 'app-perfume-card',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { style: 'display: contents' },
-  imports: [ArenaCard, ArenaFigure, ArenaMedia, ArenaFallback],
+  imports: [ArenaCard, ArenaFigure, ArenaMedia, ArenaFallback, ArenaBadge],
   templateUrl: './perfume-card.html',
   styleUrl: './perfume-card.css',
 })
